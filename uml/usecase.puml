@@ -1,0 +1,50 @@
+@startuml usecases
+title Use Cases
+
+:Admin: -|> :User:
+
+rectangle Identity {
+    User -right-> (Register)
+
+    User -right-> (Login)
+    Login .up.> Register
+}
+
+rectangle CAFF {
+    (Upload CAFF) as Upload
+    User -right-> Upload
+    Upload ..> Login
+
+
+    (Delete CAFF) as DelCaff
+    User -right-> DelCaff
+    DelCaff ..> Login
+
+
+    (Modify CAFF Title) as ModCaff
+    User -right-> ModCaff
+    ModCaff ..> Login
+
+    User -right-> (Search)
+    Search ..> Login
+
+    User -right-> (Download)
+    Download ..> Login
+}
+
+rectangle Comment {
+    (Create Comment) as MakeComment
+    User -right-> MakeComment
+    MakeComment ..> Login
+
+    (Delete Comment) as DelComment
+    User -right-> DelComment
+    DelComment ..> Login
+
+
+    (Modify Comment) as ModComment
+    User -right-> ModComment
+    ModComment ..> Login
+}
+
+@enduml
