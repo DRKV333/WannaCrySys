@@ -1,50 +1,39 @@
-@startuml usecases
-title Use Cases
+@startuml
+left to right direction
+:User: <|-up- :Admin:
 
-:Admin: -|> :User:
-
-rectangle Identity {
-    User -right-> (Register)
-
-    User -right-> (Login)
-    Login .up.> Register
+rectangle Identity{
+  User -up-> (Register)
+  User --> (Login)
+  (Login) .left.> (Register) : <<extend>>
 }
 
 rectangle CAFF {
-    (Upload CAFF) as Upload
-    User -right-> Upload
-    Upload ..> Login
-
-
-    (Delete CAFF) as DelCaff
-    User -right-> DelCaff
-    DelCaff ..> Login
-
-
-    (Modify CAFF Title) as ModCaff
-    User -right-> ModCaff
-    ModCaff ..> Login
-
-    User -right-> (Search)
-    Search ..> Login
-
-    User -right-> (Download)
-    Download ..> Login
+  User --> (Download)
+  User --> (Search)
+  (Manage own CAFF) as ManageOwnCAFF
+  (Manage CAFF of\n other users) as ManageOthersCAFF
+  User --> ManageOwnCAFF
+  (Upload) .up.> ManageOwnCAFF : <<extend>>
+  Admin --> ManageOthersCAFF
+  (Modify title) .up.> ManageOwnCAFF : <<extend>>
+  (Modify title) .up.> ManageOthersCAFF : <<extend>>
+  (Delete) as DeleteCAFF
+  DeleteCAFF .up.> ManageOwnCAFF : <<extend>>
+  DeleteCAFF .up.> ManageOthersCAFF : <<extend>>
 }
 
 rectangle Comment {
-    (Create Comment) as MakeComment
-    User -right-> MakeComment
-    MakeComment ..> Login
-
-    (Delete Comment) as DelComment
-    User -right-> DelComment
-    DelComment ..> Login
-
-
-    (Modify Comment) as ModComment
-    User -right-> ModComment
-    ModComment ..> Login
+  (Manage own Comment) as ManageOwnComment
+  (Manage Comment of\n other users) as ManageOthersComment
+  (Create) ..> ManageOwnComment : <<extend>>
+  (Modify) ..> ManageOwnComment : <<extend>>
+  (Modify) ..> ManageOthersComment : <<extend>>
+  (Delete) as DeleteComment
+  DeleteComment ..> ManageOwnComment : <<extend>>
+  DeleteComment ..> ManageOthersComment : <<extend>>
+  User -left-> ManageOwnComment
+  Admin -up-> ManageOthersComment
 }
 
 @enduml
