@@ -1,0 +1,49 @@
+@startuml usecase_user
+left to right direction
+
+rectangle Identity{
+  (Modify own Profile) as ModifyOwnProfile
+  (Delete own Profile) as DeleteOwnProfile
+  (Login) .down.> (Register) : <<include>>
+  (ModifyOwnProfile) .down.> (Login) : <<include>>
+  (DeleteOwnProfile) .down.> (Login) : <<include>>
+}
+
+User --> (Login)
+User --> (Register)
+User --> ModifyOwnProfile
+User --> DeleteOwnProfile
+
+rectangle CAFF {
+  (Download CAFF file) as DownloadCAFF
+  (Search CAFF file) as SearchCAFF
+  (Upload CAFF file) as UploadCAFF
+  (Modify own CAFF\nfile's title) as ModifyOwnCAFF
+  (Delete own CAFF\nfile) as DeleteOwnCAFF
+  DownloadCAFF ..> (Login) : <<include>>
+  SearchCAFF ..> (Login) : <<include>>
+  UploadCAFF ..> (Login) : <<include>>
+  ModifyOwnCAFF ..> (Login) : <<include>>
+  DeleteOwnCAFF ..> (Login) : <<include>>
+}
+
+User --> DownloadCAFF
+User --> SearchCAFF
+User --> UploadCAFF
+User --> ModifyOwnCAFF
+User --> DeleteOwnCAFF
+
+rectangle Comment {
+  (Create Comment) as CreateComment
+  (Modify own Comment) as ModifyOwnComment
+  (Delete own Comment) as DeleteOwnComment
+  CreateComment ..> (Login) : <<include>>
+  ModifyOwnComment ..> (Login) : <<include>>
+  DeleteOwnComment ..> (Login) : <<include>>
+}
+
+User -down-> CreateComment
+User -down-> ModifyOwnComment
+User -down-> DeleteOwnComment
+
+@enduml
