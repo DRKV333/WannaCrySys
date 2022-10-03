@@ -15,18 +15,23 @@ User --> ModifyOwnProfile
 User --> DeleteOwnProfile
 
 rectangle CAFF {
+  (Buy CAFF file) as BuyCAFF
   (Download CAFF file) as DownloadCAFF
   (Search CAFF file) as SearchCAFF
   (Upload CAFF file) as UploadCAFF
   (Modify own CAFF\nfile's title) as ModifyOwnCAFF
   (Delete own CAFF\nfile) as DeleteOwnCAFF
-  DownloadCAFF ..> (Login) : <<include>>
-  SearchCAFF ..> (Login) : <<include>>
-  UploadCAFF ..> (Login) : <<include>>
-  ModifyOwnCAFF ..> (Login) : <<include>>
-  DeleteOwnCAFF ..> (Login) : <<include>>
+  BuyCAFF ....> (Login) : <<include>>
+  DownloadCAFF ....> (Login) : <<include>>
+  SearchCAFF ....> (Login) : <<include>>
+  UploadCAFF ....> (Login) : <<include>>
+  ModifyOwnCAFF ....> (Login) : <<include>>
+  DeleteOwnCAFF ....> (Login) : <<include>>
+
+  DownloadCAFF .> BuyCAFF : <<include>>
 }
 
+User --> BuyCAFF
 User --> DownloadCAFF
 User --> SearchCAFF
 User --> UploadCAFF
