@@ -1,0 +1,39 @@
+@startuml
+autonumber 1
+
+box "CAFF file upload" #FFF
+
+User -> CAFFManager: uploadCAFF(name, password, caff_file)
+activate CAFFManager 
+
+note left of CAFFManager #DDD
+All tasks will be logged
+end note
+
+CAFFManager -> UserManager: checkAuth(name, password)
+activate UserManager
+
+UserManager -->> CAFFManager: isSuccess
+deactivate UserManager
+
+alt auth success
+
+CAFFManager -> CAFFManager: SaveCaffFile(caff_file)
+activate CAFFManager
+
+deactivate CAFFManager
+
+
+CAFFManager -->> User: uploadSuccessful
+
+else else
+
+
+User <<-- CAFFManager: Failure
+deactivate CAFFManager 
+
+end
+
+end box
+
+@enduml
