@@ -3,14 +3,14 @@ autonumber 1
 
 box "CAFF file upload" #FFF
 
-User -> CAFFManager: uploadCAFF(name, password, caff_file)
+User -> CAFFManager: uploadCAFF(name, password, caffFile)
 activate CAFFManager 
 
 note left of CAFFManager #DDD
-All tasks will be logged
+Tasks will be logged
 end note
 
-CAFFManager -> UserManager: checkAuth(name, password)
+CAFFManager -> UserManager: checkAuth(token)
 activate UserManager
 
 UserManager -->> CAFFManager: isSuccess
@@ -18,7 +18,13 @@ deactivate UserManager
 
 alt auth success
 
-CAFFManager -> CAFFManager: SaveCaffFile(caff_file)
+CAFFManager -> CAFFParser: ParseFile(caffFile)
+activate CAFFParser
+
+CAFFManager <<-- CAFFParser: caff
+deactivate CAFFParser
+
+CAFFManager -> CAFFManager: SaveCaffFile(caff)
 activate CAFFManager
 
 deactivate CAFFManager

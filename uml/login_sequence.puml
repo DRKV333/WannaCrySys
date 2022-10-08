@@ -6,13 +6,13 @@ User -> UserManager: loginUser(name, password)
 activate UserManager
 
 note left of UserManager #DDD
-All tasks will be logged
+Tasks will be logged
 end note
 
 UserManager -> UserManager: checkCredentials(name, password)
 activate UserManager
 
-UserManager -> UserDatabase: getCredentialsFromDatabase(username)
+UserManager -> UserDatabase: getCredentialsFromDatabase(name)
 activate UserDatabase
 
 UserManager <<-- UserDatabase: Credentials

@@ -7,10 +7,10 @@ User -> CAFFManager: modifyTitle(caffId, newTitle)
 activate CAFFManager
 
 note left of CAFFManager #DDD
-All tasks will be logged
+Tasks will be logged
 end note
 
-CAFFManager -> UserManager: checkCredentials(name, password)
+CAFFManager -> UserManager: checkAuth(token)
 activate UserManager
 
 CAFFManager <<-- UserManager: Success
@@ -18,7 +18,7 @@ deactivate UserManager
 
 alt can modify
 
-CAFFManager -> CAFFManager: ModifyTitle()
+CAFFManager -> CAFFManager: ModifyTitle(newTitle)
 activate CAFFManager
 
 deactivate CAFFManager

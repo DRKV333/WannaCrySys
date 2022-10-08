@@ -1,9 +1,9 @@
 @startuml
 autonumber 1
 
-box "Delete CAFF" #FFF
+box "Modify Comment" #FFF
 
-User -> CAFFManager: deleteCAFF(caffId)
+User -> CAFFManager: modifyComment(caffId, newComment)
 activate CAFFManager
 
 note left of CAFFManager #DDD
@@ -18,9 +18,14 @@ deactivate UserManager
 
 alt auth success
 
-CAFFManager -> CAFFManager: deleteCAFF(caffId)
+CAFFManager -> CAFFManager: modifyComment(newComment)
 activate CAFFManager
 
+CAFFManager -> CAFFDatabase: modifyCAFF(caffId, caff)
+activate CAFFDatabase
+
+CAFFManager <<-- CAFFDatabase
+deactivate CAFFDatabase
 
 deactivate CAFFManager
 

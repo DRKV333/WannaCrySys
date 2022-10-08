@@ -7,7 +7,7 @@ activate UserManager
 
 
 note left of UserManager #DDD
-All tasks will be logged
+Tasks will be logged
 end note
 
 
