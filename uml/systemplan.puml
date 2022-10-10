@@ -1,18 +1,13 @@
 @startuml
-skinparam BackgroundColor transparent
 skinparam componentStyle rectangle
 
-
 component AppStore {
-    [Backend] -> [Database]
-    [Backend] <- [Database]
-
-
-    [CAFFParser1] <-- [Backend]
-    [CAFFParser1] --> [Backend]
-
-
+    [CAFFParser] <-- [Backend]
+    [CAFFParser] --> [Backend]
 }
+
+[Backend] -> [Database]
+[Backend] <- [Database]
 
 [Backend] <-left- [User]
 [Backend] -left-> [User]
