@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.22)
-project(libcaff LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.24)
+project(libcaff LANGUAGES C CXX)
 
 set(SOURCEFILES
 	src/Caff.cpp
@@ -12,19 +12,19 @@ set(RUNER_SOURCEFILES
 	caffrunner/caffrunner.cpp
 )
 
+set(SPNG_SOURCEFILES libspng/spng/spng.c)
+
 set(ZLIB_USE_STATIC_LIBS ON)
-set(SPNG_SHARED OFF)
-set(SPNG_STATIC ON)
-set(BUILD_EXAMPLES OFF)
-add_subdirectory(libspng EXCLUDE_FROM_ALL)
+find_package(ZLIB REQUIRED)
+
+add_library(spng STATIC ${SPNG_SOURCEFILES})
+target_include_directories(spng PUBLIC libspng/spng)
+target_compile_definitions(spng PUBLIC SPNG_STATIC)
+target_link_libraries(spng ZLIB::ZLIB)
 
 add_library(libcaff SHARED ${SOURCEFILES})
 target_include_directories(libcaff PUBLIC include)
-
-target_link_libraries(libcaff spng_static)
-find_package(ZLIB REQUIRED)
-target_link_libraries(spng_static ${ZLIB_LIBRARIES})
-target_include_directories(libcaff PRIVATE libspng/spng) # spng doesn't do this, for some reason...
+target_link_libraries(libcaff spng)
 
 file(GLOB_RECURSE HEADERFILES src/*.h)
 target_sources(libcaff PRIVATE ${HEADERFILES})
