@@ -29,6 +29,8 @@ bool libcaff_makePreview(const char* inPath, const char* outPath, size_t maxDeco
 		lastError = std::string(e.what());
 		return false;
 	}
+
+	return true;
 }
 
 const char* libcaff_getLastError()
