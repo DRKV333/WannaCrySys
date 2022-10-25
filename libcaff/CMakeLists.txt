@@ -12,15 +12,11 @@ set(RUNER_SOURCEFILES
 	caffrunner/caffrunner.cpp
 )
 
-set(SPNG_SOURCEFILES libspng/spng/spng.c)
-
-set(ZLIB_USE_STATIC_LIBS ON)
-find_package(ZLIB REQUIRED)
+set(SPNG_SOURCEFILES miniz/miniz.c libspng/spng/spng.c)
 
 add_library(spng STATIC ${SPNG_SOURCEFILES})
-target_include_directories(spng PUBLIC libspng/spng)
-target_compile_definitions(spng PUBLIC SPNG_STATIC)
-target_link_libraries(spng ZLIB::ZLIB)
+target_include_directories(spng PRIVATE miniz PUBLIC libspng/spng)
+target_compile_definitions(spng PUBLIC SPNG_STATIC SPNG_USE_MINIZ)
 
 add_library(libcaff SHARED ${SOURCEFILES})
 target_include_directories(libcaff PUBLIC include)
