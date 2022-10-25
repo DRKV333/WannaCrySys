@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 #ifdef libcaff_EXPORTS
 #define LIBCAFFAPI __declspec(dllexport)
 #else

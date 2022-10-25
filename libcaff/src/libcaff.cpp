@@ -18,9 +18,11 @@ bool libcaff_makePreview(const char* inPath, const char* outPath, size_t maxDeco
 
 		stream.exceptions(std::ios_base::failbit);
 
+		Binreader reader(stream);
+
 		Caff caff;
 		caff.setMaxDecodeSize(maxDecodeSize);
-		caff.read(Binreader(stream));
+		caff.read(reader);
 
 		caff.getPreviewCiff().writePng(outPath);
 	}
