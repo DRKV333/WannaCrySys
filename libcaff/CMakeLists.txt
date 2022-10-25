@@ -44,3 +44,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		target_link_options(caffrunner PRIVATE "-fsanitize=address")
 	endif()
 endif()
+
+find_program(CPPCHECK cppcheck)
+if(CPPCHECK)
+	set_target_properties(libcaff caffrunner PROPERTIES CXX_CPPCHECK "${CPPCHECK};-D__cppcheck__")
+endif()

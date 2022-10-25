@@ -6,7 +6,7 @@
 #include <cstring>
 
 // Assume native byte order is little is little endian, so we don't have to worry about swapping anything.
-#if !(defined(_M_IX86) || (defined(_M_AMD64) && !defined(_M_ARM)) || defined(__i386__) || defined(__x86_64__))
+#if !(defined(_M_IX86) || (defined(_M_AMD64) && !defined(_M_ARM)) || defined(__i386__) || defined(__x86_64__) || defined(__cppcheck__))
 #error Architecture might not be little endian...
 #endif
 
