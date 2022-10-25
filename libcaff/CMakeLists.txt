@@ -30,3 +30,8 @@ target_sources(libcaff PRIVATE ${PUBLIC_HEADERFILES})
 
 add_executable(caffrunner ${RUNER_SOURCEFILES})
 target_link_libraries(caffrunner libcaff)
+
+if(MSVC)
+	target_compile_options(libcaff PRIVATE "/Wall" "/fsanitize=address")
+	target_compile_options(caffrunner PRIVATE "/Wall" "/fsanitize=address")
+endif()
