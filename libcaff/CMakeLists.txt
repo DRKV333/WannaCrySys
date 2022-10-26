@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.22)
 project(libcaff LANGUAGES C CXX)
+
+option(LIBCAFF_STATIC "Link libcaff to caffrunner statically (for fuzzing)" OFF)
 
 set(SOURCEFILES
 	src/Caff.cpp
@@ -18,7 +20,11 @@ add_library(spng STATIC ${SPNG_SOURCEFILES})
 target_include_directories(spng PRIVATE miniz PUBLIC libspng/spng)
 target_compile_definitions(spng PUBLIC SPNG_STATIC SPNG_USE_MINIZ)
 
-add_library(libcaff SHARED ${SOURCEFILES})
+if(LIBCAFF_STATIC)
+	add_library(libcaff STATIC ${SOURCEFILES})
+else()
+	add_library(libcaff SHARED ${SOURCEFILES})
+endif()
 target_include_directories(libcaff PUBLIC include)
 target_link_libraries(libcaff spng)
 
@@ -31,8 +37,8 @@ target_sources(libcaff PRIVATE ${PUBLIC_HEADERFILES})
 add_executable(caffrunner ${RUNER_SOURCEFILES})
 target_link_libraries(caffrunner libcaff)
 
-if(WIN32)
-	target_compile_definitions(libcaff PUBLIC WIN32)
+if(WIN32 AND (NOT LIBCAFF_STATIC))
+	target_compile_definitions(libcaff PUBLIC DO_DLL_EXPORTS)
 endif()
 
 if(MSVC)
@@ -49,7 +55,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	endif()
 endif()
 
-if(NOT WIN32)
+if((NOT WIN32) AND (NOT LIBCAFF_STATIC))
 	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		target_compile_options(spng PRIVATE "-fPIC")
 		target_compile_options(libcaff PRIVATE "-fPIC")

@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-#ifdef WIN32
+#ifdef DO_DLL_EXPORTS
 #ifdef libcaff_EXPORTS
 #define LIBCAFFAPI __declspec(dllexport)
 #else
