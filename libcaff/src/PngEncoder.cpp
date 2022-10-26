@@ -20,7 +20,8 @@ PngEncoder::~PngEncoder()
 
 void PngEncoder::setOutPath(const char* path)
 {
-	if (fopen_s(&file, path, "wb") != 0)
+	file = fopen(path, "wb");
+	if (file == nullptr)
 		throw std::runtime_error("Failed to open output file");
 	spng_set_png_file(ctx, file);
 }
