@@ -1,0 +1,17 @@
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.BLL.deps.json
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.BLL.dll
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.BLL.pdb
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.DAL.dll
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.Shared.dll
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.DAL.pdb
+D:\CaffShop\CaffShop.BLL\bin\Debug\net6.0\CaffShop.Shared.pdb
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.csproj.AssemblyReference.cache
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.AssemblyInfoInputs.cache
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.AssemblyInfo.cs
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.csproj.CoreCompileInputs.cache
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.csproj.CopyComplete
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.dll
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\refint\CaffShop.BLL.dll
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\CaffShop.BLL.pdb
+D:\CaffShop\CaffShop.BLL\obj\Debug\net6.0\ref\CaffShop.BLL.dll

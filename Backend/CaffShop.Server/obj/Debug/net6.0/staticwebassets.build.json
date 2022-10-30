@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0lWzVle42sZmxiAV6m5/b9VCBCW1x7jqSW/Xze7405U=",
+  "Source": "CaffShop.Server",
+  "BasePath": "_content/CaffShop.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

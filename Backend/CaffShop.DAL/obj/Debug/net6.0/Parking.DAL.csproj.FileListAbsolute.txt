@@ -1,0 +1,14 @@
+D:\ParkingSpaceFinder\Backend\Parking.DAL\bin\Debug\net6.0\Parking.DAL.deps.json
+D:\ParkingSpaceFinder\Backend\Parking.DAL\bin\Debug\net6.0\Parking.DAL.runtimeconfig.json
+D:\ParkingSpaceFinder\Backend\Parking.DAL\bin\Debug\net6.0\Parking.DAL.dll
+D:\ParkingSpaceFinder\Backend\Parking.DAL\bin\Debug\net6.0\Parking.DAL.pdb
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.csproj.AssemblyReference.cache
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.AssemblyInfoInputs.cache
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.AssemblyInfo.cs
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.csproj.CoreCompileInputs.cache
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.dll
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\refint\Parking.DAL.dll
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.pdb
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\Parking.DAL.genruntimeconfig.cache
+D:\ParkingSpaceFinder\Backend\Parking.DAL\obj\Debug\net6.0\ref\Parking.DAL.dll
