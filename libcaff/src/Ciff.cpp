@@ -12,15 +12,15 @@ void Ciff::read(Binreader& reader)
 	uint64_t headerSize = reader.read<uint64_t>();
 	uint64_t contentSize = reader.read<uint64_t>();
 	
-	if (contentSize > maxDecodeSize * 3)
-		throw std::runtime_error("CIFF too large to decode");
-
 	uint64_t widthL = reader.read<uint64_t>();
 	uint64_t heightL = reader.read<uint64_t>();
 
 	if (widthL > std::numeric_limits<uint32_t>::max() ||
-		heightL > std::numeric_limits<uint32_t>::max() ||
-		contentSize != widthL * heightL * 3)
+		heightL > std::numeric_limits<uint32_t>::max() || 
+		contentSize > maxDecodeSize * 3)
+		throw std::runtime_error("CIFF too large to decode");
+
+	if (contentSize != widthL * heightL * 3)
 		throw std::runtime_error("CIFF content size does not match image dimensions");
 
 	width = static_cast<uint32_t>(widthL);
