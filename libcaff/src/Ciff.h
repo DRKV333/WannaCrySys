@@ -7,7 +7,7 @@
 class Ciff
 {
 private:
-	size_t maxDecodeSize = 1000 * 1000 * 3;
+	size_t maxDecodeSize = 1000 * 1000;
 	std::vector<char> pixelBuffer;
 	uint32_t width;
 	uint32_t height;

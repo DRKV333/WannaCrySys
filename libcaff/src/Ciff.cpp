@@ -12,7 +12,7 @@ void Ciff::read(Binreader& reader)
 	uint64_t headerSize = reader.read<uint64_t>();
 	uint64_t contentSize = reader.read<uint64_t>();
 	
-	if (contentSize > maxDecodeSize)
+	if (contentSize > maxDecodeSize * 3)
 		throw std::runtime_error("CIFF too large to decode");
 
 	uint64_t widthL = reader.read<uint64_t>();
