@@ -14,7 +14,7 @@ bool libcaff_makePreview(const char* inPath, const char* outPath, size_t maxDeco
 		std::fstream stream;
 		stream.open(inPath, std::ios_base::in | std::ios_base::binary);
 		if (!stream.is_open())
-			throw std::runtime_error("Failed to open input file");
+			throw CaffException("Failed to open input file");
 
 		stream.exceptions(std::ios_base::failbit);
 

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "CaffException.h"
+
 #include <istream>
-#include <stdexcept>
 #include <string>
 #include <cstring>
 
@@ -38,7 +39,7 @@ public:
 		char buffer[size];
 		read(buffer, size);
 		if (std::memcmp(buffer, magic, size) != 0)
-			throw std::runtime_error("Bad magic");
+			throw CaffException("Bad magic");
 	}
 
 	void skip(size_t size)

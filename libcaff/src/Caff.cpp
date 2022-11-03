@@ -1,16 +1,18 @@
 #include "Caff.h"
 
+#include "CaffException.h"
+
 void Caff::readHeaderBlock(Binreader& reader)
 {
 	uint64_t blockSize = reader.read<uint64_t>();
 	if (blockSize != 20)
-		throw std::runtime_error("Bad CAFF header block size");
+		throw CaffException("Bad CAFF header block size");
 
 	reader.assertMagic<4>("CAFF");
 	
 	uint64_t headerSize = reader.read<uint64_t>();
 	if (headerSize != 20)
-		throw std::runtime_error("Bad CAFF header size");
+		throw CaffException("Bad CAFF header size");
 
 	numAnim = reader.read<uint64_t>();
 }
@@ -27,7 +29,7 @@ void Caff::read(Binreader& reader)
 {
 	uint8_t blockId = reader.read<uint8_t>();
 	if (blockId != 1)
-		throw std::runtime_error("Expected CAFF header block");
+		throw CaffException("Expected CAFF header block");
 
 	readHeaderBlock(reader);
 
@@ -38,12 +40,12 @@ void Caff::read(Binreader& reader)
 
 		if (blockId == 1)
 		{
-			throw std::runtime_error("Duplicate CAFF hader block");
+			throw CaffException("Duplicate CAFF hader block");
 		}
 		else if (blockId == 2)
 		{
 			if (hadCreditsBlock)
-				throw std::runtime_error("Duplicate CAFF credits block");
+				throw CaffException("Duplicate CAFF credits block");
 			hadCreditsBlock = true;
 
 			readCreditsBlock(reader);
@@ -57,7 +59,7 @@ void Caff::read(Binreader& reader)
 		}
 		else
 		{
-			throw std::runtime_error("Invalid CAFF clock type");
+			throw CaffException("Invalid CAFF clock type");
 		}
 	}
 }
