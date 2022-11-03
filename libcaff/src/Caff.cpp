@@ -40,7 +40,7 @@ void Caff::read(Binreader& reader)
 
 		if (blockId == 1)
 		{
-			throw CaffException("Duplicate CAFF hader block");
+			throw CaffException("Duplicate CAFF header block");
 		}
 		else if (blockId == 2)
 		{
