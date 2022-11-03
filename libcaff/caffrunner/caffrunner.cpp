@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 	bool result = libcaff_makePreview(argv[1], argv[2], 10000 * 10000);
 	if (!result)
 	{
-		std::cout << libcaff_getLastError();
+		std::cout << libcaff_getLastError() << std::endl;
 		return 2;
 	}
 
