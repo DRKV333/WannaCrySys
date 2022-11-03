@@ -13,4 +13,4 @@ RUN mkdir -p build && \
     cmake -DLIBCAFF_STATIC=ON -DCMAKE_C_COMPILER=afl-clang-lto -DCMAKE_CXX_COMPILER=afl-clang-lto++ .. && \
 	cmake --build .
 
-CMD afl-fuzz -i example -o /afl_out -- build/caffrunner @@ /tmp/caff.png
+CMD afl-fuzz -i example_crafted -o /afl_out -- build/caffrunner @@ /tmp/caff.png
