@@ -35,7 +35,7 @@ public:
 	template <size_t size>
 	void assertMagic(char* magic)
 	{
-		char buffer[4];
+		char buffer[size];
 		read(buffer, size);
 		if (std::memcmp(buffer, magic, size) != 0)
 			throw std::runtime_error("Bad magic");
