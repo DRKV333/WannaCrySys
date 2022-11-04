@@ -71,6 +71,10 @@ A módosítható globális változó itt szüksége a C interface megvalósítá
 
 Ez a függvény igazából jelenleg csak placeholder, a teljes implementáció a Caff osztályba írná a credits blokk tartalmát, így ez nem lehetne const.
 
+### Cppcheck
+
+Fordításkor a forrásfájlok a Cppcheck statikus elemzővel is ellenőrzésre kerülnek, amennyiben az elérhető. A Cppcheck nem talált semmilyen értékelhető hibát a projektben.
+
 ### Fordító warning-ok
 
 A projekt az MSVC és GCC fordítókon minden elérhető figyelmeztetés engedélyezése mellett fordul. Ezek a jelenlegi állapotban nem túl hasznosak. Az MSVC rengeteg haszontalan figyelmeztetést ad ki, például arról, hogy egy osztály copy konstruktora implicit delete-elve lett. A GCC figyelmeztet a C++ szabvány szerint a `const char*` bemenetű `Binreader::assertMagic` függvény nem kaphat `std::string` literált. Ez a `-pedantic` kapcsoló használata miatt jelenik, a valóságban használt fordítóknál ez nem okoz gondot.
