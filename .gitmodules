@@ -1,0 +1,3 @@
+[submodule "libcaff/libspng"]
+	path = libcaff/libspng
+	url = https://github.com/randy408/libspng.git
