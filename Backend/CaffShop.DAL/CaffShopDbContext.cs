@@ -17,6 +17,9 @@ namespace CaffShop.DAL
     {
     }
     public override DbSet<User>? Users { get; set; }
+    public DbSet<Caff> Caffs { get; set; }
+    public DbSet<Comment> Comment { get; set; }
+    public DbSet<Purchase> Purchases { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -32,10 +35,61 @@ namespace CaffShop.DAL
       {
         entity.ToTable("Users");
         entity.Property(e => e.Name).IsRequired().HasMaxLength(250);
+      });
+
+      modelBuilder.Entity<Caff>(entity =>
+      {
+        entity.Property(e => e.Title).IsRequired();
 
         entity.Property(e => e.CreatedDate)
           .HasColumnType("DATETIME2 (0)")
           .HasDefaultValueSql("(getdate())");
+
+        entity.HasOne(e => e.Owner)
+          .WithMany(s => s.Caffs)
+          .HasForeignKey(e => e.OwnerId)
+          .OnDelete(DeleteBehavior.ClientCascade)
+          .HasConstraintName("FK_Caffs_Users_Owner");
+      });
+
+      modelBuilder.Entity<Comment>(entity =>
+      {
+        entity.Property(e => e.Content).IsRequired();
+
+        entity.Property(e => e.CreatedDate)
+          .HasColumnType("DATETIME2 (0)")
+          .HasDefaultValueSql("(getdate())");
+
+       entity.HasOne(e => e.Caff)
+          .WithMany(s => s.Comments)
+          .HasForeignKey(e => e.CaffId)
+          .OnDelete(DeleteBehavior.ClientCascade)
+          .HasConstraintName("FK_Comments_Caffs_Caff");
+
+        entity.HasOne(e => e.User)
+          .WithMany(s => s.Comments)
+          .HasForeignKey(e => e.UserId)
+          .OnDelete(DeleteBehavior.ClientCascade)
+          .HasConstraintName("FK_Comments_Users_User");
+      });
+
+      modelBuilder.Entity<Purchase>(entity =>
+      {
+        entity.Property(e => e.CreatedDate)
+          .HasColumnType("DATETIME2 (0)")
+          .HasDefaultValueSql("(getdate())");
+
+        entity.HasOne(e => e.Caff)
+          .WithMany(s => s.Purchases)
+          .HasForeignKey(e => e.CaffId)
+          .OnDelete(DeleteBehavior.ClientCascade)
+          .HasConstraintName("FK_Purchases_Caffs_Caff");
+
+        entity.HasOne(e => e.User)
+          .WithMany(s => s.Purchases)
+          .HasForeignKey(e => e.UserId)
+          .OnDelete(DeleteBehavior.ClientCascade)
+          .HasConstraintName("FK_Purchases_Users_User");
       });
 
       OnModelCreatingPartial(modelBuilder);

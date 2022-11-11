@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CaffShop.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class Models : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,9 +31,6 @@ namespace CaffShop.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "DATETIME2 (0)", nullable: false, defaultValueSql: "(getdate())"),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -160,6 +157,79 @@ namespace CaffShop.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Caffs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "DATETIME2 (0)", nullable: false, defaultValueSql: "(getdate())"),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
+                    ImgURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Caffs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Caffs_Users_Owner",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(type: "DATETIME2 (0)", nullable: false, defaultValueSql: "(getdate())"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CaffId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Caffs_Caff",
+                        column: x => x.CaffId,
+                        principalTable: "Caffs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Users_User",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Purchases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(type: "DATETIME2 (0)", nullable: false, defaultValueSql: "(getdate())"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CaffId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Purchases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Purchases_Caffs_Caff",
+                        column: x => x.CaffId,
+                        principalTable: "Caffs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Purchases_Users_User",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -186,6 +256,31 @@ namespace CaffShop.DAL.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Caffs_OwnerId",
+                table: "Caffs",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_CaffId",
+                table: "Comment",
+                column: "CaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId",
+                table: "Comment",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Purchases_CaffId",
+                table: "Purchases",
+                column: "CaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Purchases_UserId",
+                table: "Purchases",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -218,7 +313,16 @@ namespace CaffShop.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comment");
+
+            migrationBuilder.DropTable(
+                name: "Purchases");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Caffs");
 
             migrationBuilder.DropTable(
                 name: "Users");

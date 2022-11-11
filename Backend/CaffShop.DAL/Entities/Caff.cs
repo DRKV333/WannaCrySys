@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,19 +8,23 @@ using System.Xml.Linq;
 
 namespace CaffShop.DAL.Entities
 {
-  public class User : IdentityUser<int>
+  public class Caff
   {
-    public User()
+    public Caff()
     {
       Comments = new HashSet<Comment>();
       Purchases = new HashSet<Purchase>();
-      Caffs = new HashSet<Caff>();
     }
 
-    [PersonalData]
-    public string? Name { get; set; }
+    [Key]
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public int OwnerId { get; set; }
+    public virtual User? Owner { get; set; }
+    public string ImgURL { get; set; }
+    public string FilePath { get; set; }
     public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<Purchase> Purchases { get; set; }
-    public virtual ICollection<Caff> Caffs { get; set; }
   }
 }

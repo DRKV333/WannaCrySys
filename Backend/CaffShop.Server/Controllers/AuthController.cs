@@ -64,9 +64,6 @@ namespace Parking.Server.Controllers
       var claims = await _tokenManager.GetClaims(user);
       var tokenOptions = _tokenManager.GenerateTokenOptions(signingCredentials, claims);
       var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-      user.RefreshToken = _tokenManager.GenerateRefreshToken();
-      user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
       await _userManager.UpdateAsync(user);
 
       return Ok(new AuthResponseDto { IsAuthSuccessful = true, Token = token });
@@ -96,26 +93,6 @@ namespace Parking.Server.Controllers
         }
 
       }
-    }
-
-    [HttpPost("Refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto tokenDto)
-    {
-      if (tokenDto is null)
-      {
-        return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request" });
-      }
-      var principal = _tokenManager.GetPrincipalFromExpiredToken(tokenDto.Token);
-      var user = await _userManager.FindByEmailAsync(principal.Identity.Name);
-      if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-        return BadRequest(new AuthResponseDto { IsAuthSuccessful = false, ErrorMessage = "Invalid client request" });
-      var signingCredentials = _tokenManager.GetSigningCredentials();
-      var claims = await _tokenManager.GetClaims(user);
-      var tokenOptions = _tokenManager.GenerateTokenOptions(signingCredentials, claims);
-      var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-      user.RefreshToken = _tokenManager.GenerateRefreshToken();
-      await _userManager.UpdateAsync(user);
-      return Ok(new AuthResponseDto { Token = token, RefreshToken = user.RefreshToken, IsAuthSuccessful = true });
     }
   }
 }

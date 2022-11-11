@@ -22,6 +22,101 @@ namespace CaffShop.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("CaffShop.DAL.Entities.Caff", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2 (0)")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Caffs");
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CaffId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2 (0)")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaffId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.Purchase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CaffId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME2 (0)")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaffId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Purchases");
+                });
+
             modelBuilder.Entity("CaffShop.DAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -36,11 +131,6 @@ namespace CaffShop.DAL.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("DATETIME2 (0)")
-                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -76,12 +166,6 @@ namespace CaffShop.DAL.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -239,6 +323,60 @@ namespace CaffShop.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CaffShop.DAL.Entities.Caff", b =>
+                {
+                    b.HasOne("CaffShop.DAL.Entities.User", "Owner")
+                        .WithMany("Caffs")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Caffs_Users_Owner");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("CaffShop.DAL.Entities.Caff", "Caff")
+                        .WithMany("Comments")
+                        .HasForeignKey("CaffId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Comments_Caffs_Caff");
+
+                    b.HasOne("CaffShop.DAL.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Comments_Users_User");
+
+                    b.Navigation("Caff");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.Purchase", b =>
+                {
+                    b.HasOne("CaffShop.DAL.Entities.Caff", "Caff")
+                        .WithMany("Purchases")
+                        .HasForeignKey("CaffId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Purchases_Caffs_Caff");
+
+                    b.HasOne("CaffShop.DAL.Entities.User", "User")
+                        .WithMany("Purchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Purchases_Users_User");
+
+                    b.Navigation("Caff");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -288,6 +426,22 @@ namespace CaffShop.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.Caff", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Purchases");
+                });
+
+            modelBuilder.Entity("CaffShop.DAL.Entities.User", b =>
+                {
+                    b.Navigation("Caffs");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
         }
