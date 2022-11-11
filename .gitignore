@@ -362,3 +362,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Backend/CaffShop.BLL/bin/Debug/
+/Backend/CaffShop.BLL/bin/Debug/net6.0/CaffShop.DAL.pdb
+/Backend/CaffShop.BLL/bin/Debug/net6.0/CaffShop.DAL.dll
+/Backend/CaffShop.BLL/bin/Debug/net6.0/CaffShop.Shared.pdb
+/Backend/CaffShop.BLL/bin/Debug/net6.0/CaffShop.Shared.dll
+/Backend/CaffShop.BLL/obj/Debug/net6.0/ref/CaffShop.BLL.dll
+/Backend/CaffShop.BLL/obj/Debug/net6.0/refint/CaffShop.BLL.dll
+/Backend/CaffShop.BLL/bin/Debug/net6.0/CaffShop.BLL.pdb
+/Backend/CaffShop.DAL/obj/Debug/net6.0/CaffShop.DAL.csproj.CoreCompileInputs.cache
