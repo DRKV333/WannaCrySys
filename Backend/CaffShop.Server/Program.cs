@@ -27,6 +27,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ITokenManager, TokenManager>();
+builder.Services.AddScoped<ICaffManager, CaffManager>();
 
 builder.Services.AddScoped<IRoleSeedService, RoleSeedService>();
 builder.Services.AddScoped<IUserSeedService, UserSeedService>();

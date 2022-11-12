@@ -25,7 +25,7 @@ namespace Parking.Server.Controllers
       _logger = logger;
     }
 
-    [HttpPost("CreateUser")]
+    [HttpPost("Register")]
     public async Task<IActionResult> CreateUser([FromBody]UserForRegistrationDto userForRegistration)
     {
       if (userForRegistration == null || !ModelState.IsValid)
