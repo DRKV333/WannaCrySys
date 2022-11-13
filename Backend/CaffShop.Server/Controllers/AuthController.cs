@@ -72,6 +72,12 @@ namespace Parking.Server.Controllers
       return await _userManager.GetUser(user.Id);
     }
 
+    [HttpGet("GetTest")]
+    public async Task<UserDto> GetTest()
+    {
+        return new UserDto { Name = "Működik", Id = 1, Email = "Működő tesz email címe" };
+    }
+
     [Authorize]
     [HttpPost("EditUser")]
     public async Task<IActionResult> EditUser([FromBody] UserForUpdate userDto)

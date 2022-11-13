@@ -87,11 +87,13 @@ var app = builder.Build();
 await app.MigrateDatabaseAsync<CaffShopDbContext>();
 
 
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
   app.UseSwaggerUI();
-}
+}*/
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
