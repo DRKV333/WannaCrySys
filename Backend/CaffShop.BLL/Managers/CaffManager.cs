@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +21,6 @@ namespace CaffShop.BLL.Managers
         private readonly CaffShopUserManager _userManager;
         private readonly IFileSettings _fileSettings;
         private readonly CaffShopDbContext _dbContext;
-        private readonly IFileService _fileService;
 
         public CaffManager(CaffShopUserManager userManager, IFileSettings fileSettings, CaffShopDbContext dbContext)
         {
@@ -51,6 +52,7 @@ namespace CaffShop.BLL.Managers
                 Comments = p.Comments.Select(c => new CommentDto
                 {
                     Id = c.Id,
+
                     Content = c.Content,
                     CreatedDate = c.CreatedDate,
                     UserName = c.User.Name
@@ -150,6 +152,14 @@ namespace CaffShop.BLL.Managers
             return result;
         }
 
+
+        [DllImport("libcaff", SetLastError = true)]
+        private static extern bool libcaff_makePreview(string inPath, string outPath, long maxDecodeSize = 100000000);
+
+
+        [DllImport("libcaff")]
+        private static extern string libcaff_getLastError();
+
         public async Task<ValidationResult> AddNewCaff(int userId, CaffForEditingDto newCaffDto)
         {
             ValidationResult result = ValidateUploadedFile(newCaffDto.CaffFile);
@@ -160,19 +170,44 @@ namespace CaffShop.BLL.Managers
 
             try
             {
-                string uniqueFileName = newCaffDto.CaffFile.FileName + "_" + Guid.NewGuid().ToString();
-                var filePath = Path.Combine(_fileSettings.FilePath, uniqueFileName);
+                string guid = Guid.NewGuid().ToString();
+                string uniqueFileName = guid + ".caff";
+                string uniqueImageName = guid + ".png";
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath);
+
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var filePath = Path.Combine(directoryPath, uniqueFileName);
                 newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
 
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/");
-                //meghívni a parsert
+                var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                if (!Directory.Exists(imageDirectoryPath))
+                {
+                    Directory.CreateDirectory(imageDirectoryPath);
+                }
+
+                var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
+
+                bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
+                if (!IsSuccessful)
+                {
+                    result.Errors.Add(libcaff_getLastError());
+                    return result;
+                }
 
                 _dbContext.Caffs.Add(new Caff
                 {
+                    Title = newCaffDto.Title,
                     OwnerId = userId,
-                    FileName = uniqueFileName,
-                    ImgURL = imagePath
+                    FileName = newCaffDto.CaffFile.FileName,
+                    UniqueFileName = uniqueFileName,
+                    ImgURL = "images\\" + uniqueImageName
                 });
+
                 _dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -189,7 +224,7 @@ namespace CaffShop.BLL.Managers
             ValidationResult result = new ValidationResult();
             result.IsSuccessful = true;
 
-            if (newCaffDto.CaffFile.Length > 0)
+            if (newCaffDto.CaffFile != null && newCaffDto.CaffFile.Length > 0)
             {
                 result = ValidateUploadedFile(newCaffDto.CaffFile);
                 if (!result.IsSuccessful)
@@ -215,26 +250,43 @@ namespace CaffShop.BLL.Managers
 
             try
             {
-                string uniqueFileName = newCaffDto.CaffFile.FileName + "_" + Guid.NewGuid().ToString();
-                var filePath = Path.Combine(_fileSettings.FilePath, uniqueFileName);
-                newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
-
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/");
-                //meghívni a parsert
-
-                if (File.Exists(Path.Combine(_fileSettings.FilePath, dbEntity.FileName)))
+                if (newCaffDto.CaffFile != null && newCaffDto.CaffFile.Length > 0)
                 {
-                    File.Delete(Path.Combine(_fileSettings.FilePath, dbEntity.FileName));
-                }
+                    string guid = Guid.NewGuid().ToString();
+                    string uniqueFileName = guid + ".caff";
+                    string uniqueImageName = guid + ".png";
+                    var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath);
 
-                if (File.Exists(dbEntity.ImgURL))
-                {
-                    File.Delete(dbEntity.ImgURL);
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var filePath = Path.Combine(directoryPath, uniqueFileName);
+                    newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                    var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                    if (!Directory.Exists(imageDirectoryPath))
+                    {
+                        Directory.CreateDirectory(imageDirectoryPath);
+                    }
+
+                    var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
+
+                    bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
+                    if (!IsSuccessful)
+                    {
+                        result.Errors.Add(libcaff_getLastError());
+                        return result;
+                    }
+
+                    dbEntity.FileName = newCaffDto.CaffFile.FileName;
+                    dbEntity.UniqueFileName = uniqueFileName;
+                    dbEntity.ImgURL = "images\\" + uniqueImageName;
                 }
 
                 dbEntity.Title = newCaffDto.Title;
-                dbEntity.FileName = uniqueFileName;
-                dbEntity.ImgURL = imagePath;
                 _dbContext.Caffs.Update(dbEntity);
                 _dbContext.SaveChanges();
             }
@@ -265,15 +317,23 @@ namespace CaffShop.BLL.Managers
                 return result;
             }
 
-            if (File.Exists(Path.Combine(_fileSettings.FilePath, dbEntity.FileName)))
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath, dbEntity.UniqueFileName);
+            if (File.Exists(filePath))
             {
-                File.Delete(Path.Combine(_fileSettings.FilePath, dbEntity.FileName));
+                File.Delete(filePath);
             }
 
-            if (File.Exists(dbEntity.ImgURL))
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", dbEntity.ImgURL);
+            if (File.Exists(imagePath))
             {
-                File.Delete(dbEntity.ImgURL);
+                File.Delete(imagePath);
             }
+
+            var comments = _dbContext.Comments.Where(c => c.CaffId == caffId).Select(c => c).ToList();
+            _dbContext.Comments.RemoveRange(comments);
+
+            var purchases = _dbContext.Purchases.Where(c => c.CaffId == caffId).Select(c => c).ToList();
+            _dbContext.Purchases.RemoveRange(purchases);
 
             _dbContext.Caffs.Remove(dbEntity);
             _dbContext.SaveChanges();
@@ -282,9 +342,11 @@ namespace CaffShop.BLL.Managers
             return result;
         }
 
-        public async Task<ValidationResult> DownloadCaffFile(int userId, int caffId)
+
+
+        public async Task<FileValidationResult> DownloadCaffFile(int userId, int caffId)
         {
-            ValidationResult result = new ValidationResult();
+            FileValidationResult result = new FileValidationResult();
 
             Caff dbEntity = _dbContext.Caffs.Where(c => c.Id == caffId).FirstOrDefault();
             if (dbEntity == null)
@@ -301,19 +363,21 @@ namespace CaffShop.BLL.Managers
                 return result;
             }
 
-            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath, dbEntity.FileName)))
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath, dbEntity.UniqueFileName);
+            if (File.Exists(filePath))
             {
-                File.Delete(Path.Combine(_fileSettings.FilePath, dbEntity.FileName));
+                result.IsSuccessful = true;
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                result.CaffFile = bytes;
+                result.FullName = dbEntity.FileName;
+                result.FullPath = filePath;
+                return result;
             }
-
-            if (File.Exists(dbEntity.ImgURL))
+            else
             {
-                File.Delete(dbEntity.ImgURL);
+                result.Errors.Add("File does not exist!");
+                return result;
             }
-
-
-            result.IsSuccessful = true;
-            return result;
         }
 
         private ValidationResult ValidateUploadedFile(IFormFile file)
@@ -322,6 +386,11 @@ namespace CaffShop.BLL.Managers
             ValidationResult result = new ValidationResult();
             result.IsSuccessful = true;
 
+            if (file == null || file.Length == 0)
+            {
+                result.Errors.Add("File is missing");
+                return result;
+            }
             if (file.Length == 0)
             {
                 result.Errors.Add("File is missing");
@@ -337,6 +406,11 @@ namespace CaffShop.BLL.Managers
             if (file.Length > _fileSettings.MaxSizeInMegaBytes * 1024 * 1024)
             {
                 result.Errors.Add($"The size of the given file is over the limit ({_fileSettings.MaxSizeInMegaBytes} MB)");
+                return result;
+            }
+            if (file.Length > _fileSettings.MaxSizeInMegaBytes * 1024 * 1024)
+            {
+                result.Errors.Add($"The size of the given file is over the limit ({_fileSettings.MaxSizeInMegaBytes} MB)");
 
             }
 
@@ -345,7 +419,9 @@ namespace CaffShop.BLL.Managers
                 result.IsSuccessful = false;
             }
 
+            result.IsSuccessful = true;
             return result;
         }
     }
 }
+

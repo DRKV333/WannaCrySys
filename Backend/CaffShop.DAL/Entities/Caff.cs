@@ -24,6 +24,7 @@ namespace CaffShop.DAL.Entities
     public virtual User? Owner { get; set; }
     public string ImgURL { get; set; }
     public string FileName { get; set; }
+    public string UniqueFileName { get; set; }
     public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<Purchase> Purchases { get; set; }
   }

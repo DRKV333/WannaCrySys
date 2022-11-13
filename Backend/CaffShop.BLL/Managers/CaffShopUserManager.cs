@@ -38,7 +38,7 @@ namespace CaffShop.BLL.Managers
           Title = c.Title,
           ImgURL = c.ImgURL
         }).ToList()
-      });
+      }).FirstOrDefault();
     }
 
     public async Task<bool> IsInRoleByIdAsync(User user, int roleId, CancellationToken cancellationToken = default(CancellationToken))
