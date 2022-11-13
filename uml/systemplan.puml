@@ -1,0 +1,18 @@
+@startuml
+skinparam componentStyle rectangle
+
+component AppStore {
+    [CAFFParser] <-- [Backend]
+    [CAFFParser] --> [Backend]
+}
+
+[Backend] -> [Database]
+[Backend] <- [Database]
+
+[Backend] <-left- [User]
+[Backend] -left-> [User]
+
+[Backend] <-- [Admin]
+[Backend] --> [Admin]
+
+@enduml

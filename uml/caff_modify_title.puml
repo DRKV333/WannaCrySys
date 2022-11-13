@@ -1,0 +1,37 @@
+@startuml
+autonumber 1
+
+box "Modify CAFF title" #FFF
+
+User -> CAFFManager: modifyTitle(caffId, newTitle)
+activate CAFFManager
+
+note left of CAFFManager #DDD
+Tasks will be logged
+end note
+
+CAFFManager -> UserManager: checkAuth(token)
+activate UserManager
+
+CAFFManager <<-- UserManager: Success
+deactivate UserManager
+
+alt can modify
+
+CAFFManager -> CAFFManager: ModifyTitle(newTitle)
+activate CAFFManager
+
+deactivate CAFFManager
+
+User <<-- CAFFManager: Success
+
+else else
+
+User <<-- CAFFManager: Faliure
+deactivate CAFFManager
+
+end
+
+end box
+
+@enduml

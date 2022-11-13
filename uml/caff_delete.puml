@@ -1,0 +1,38 @@
+@startuml
+autonumber 1
+
+box "Delete CAFF" #FFF
+
+User -> CAFFManager: deleteCAFF(caffId)
+activate CAFFManager
+
+note left of CAFFManager #DDD
+Tasks will be logged
+end note
+
+CAFFManager -> UserManager: checkAuth(token)
+activate UserManager
+
+CAFFManager <<-- UserManager: Success
+deactivate UserManager
+
+alt auth success
+
+CAFFManager -> CAFFManager: deleteCAFF(caffId)
+activate CAFFManager
+
+
+deactivate CAFFManager
+
+CAFFManager -->> User: Success
+
+else else
+
+CAFFManager -->> User: Faliure
+deactivate CAFFManager
+
+end
+
+end box
+
+@enduml

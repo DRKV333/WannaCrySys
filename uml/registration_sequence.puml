@@ -1,0 +1,41 @@
+@startuml
+autonumber 1.1
+box Registration #FFF
+
+User -> UserManager: registerUser(name, password)
+activate UserManager
+
+
+note left of UserManager #DDD
+Tasks will be logged
+end note
+
+
+UserManager-> UserManager: checkCredentials(name, password)
+activate UserManager
+
+UserManager -> UserDatabase: getCredentialsFromDb(username)
+activate UserDatabase
+
+UserManager <<-- UserDatabase: Credentials
+deactivate UserDatabase
+
+alt username is not used
+opt password is not valid
+
+UserManager -->> UserManager: Failure
+deactivate UserManager
+
+User <<-- UserManager: Failure
+end
+
+User <<-- UserManager: Success
+
+else else
+
+User <<-- UserManager: Failure
+
+end
+
+box end
+@enduml

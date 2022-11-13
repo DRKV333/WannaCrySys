@@ -1,0 +1,60 @@
+@startuml data_flow
+digraph data_flow {
+    node [shape=record]
+
+    ' Actors
+    { rank=same
+        user [label="User\n(Mobile app)" shape=box]
+        admin [label="Admin\n(Mobile app)" shape=box]
+    }
+
+    ' Components
+    webserver [label="Webserver" shape=circle margin=0]
+    authenticationcomp [label="Authentication\nComponent" shape=circle margin=0]
+    authorizationcomp [label="Authorization\nComponent" shape=circle margin=0]
+    userdatacontroller [label="User data\ncontroller" shape=circle margin=0]
+    { rank=same
+        caffdatacontroller [label="CAFF data\ncontroller" shape=circle margin=0]
+        caffparser [label="CAFF parser" shape=circle margin=0]
+    }
+
+    ' Datastores
+    { rank=same
+        userdb [label="<f0>    |<f1> User database"]
+        caffdb [label="<f0>    |<f1> CAFF database"]
+    }
+    
+
+    user -> webserver [label="HTTP\nrequest"]
+    webserver -> user [label="HTTP\nresponse"]
+    admin -> webserver [label="HTTP\nrequest"]
+    webserver -> admin [label="HTTP\nresponse"]
+
+    webserver -> authenticationcomp [label="Login / Register\nrequest"]
+    authenticationcomp -> webserver [label="Login / Register\nresponse"]
+
+    webserver -> caffdatacontroller [label="Upload /\nDownload /\nModify /\nComment\nrequest"]
+    caffdatacontroller -> webserver [label="CAFF file /\nComment\nresponse"]
+
+    webserver -> userdatacontroller [label="Read /\nUpdate /\nDelete\nrequest"]
+    userdatacontroller -> webserver [label="Read /\nUpdate /\nDelete\nresponse"]
+
+    authenticationcomp -> userdatacontroller [label="User data\nrequest"]
+    userdatacontroller -> authenticationcomp [label="User data\nresponse"]
+
+    caffdatacontroller -> caffparser [label="Image process\nrequest"]
+    caffparser -> caffdatacontroller [label="CAFF file"]
+
+    userdatacontroller -> userdb [label="Write"]
+    userdb -> userdatacontroller [label="Read"]
+
+    caffdatacontroller -> caffdb [label="Write"]
+    caffdb -> caffdatacontroller [label="Read"]
+
+    authorizationcomp -> userdatacontroller [label="Allow /\nDeny"]
+    userdatacontroller -> authorizationcomp [label="Activity"]
+
+    authorizationcomp -> caffdatacontroller [label="Allow /\nDeny"]
+    caffdatacontroller -> authorizationcomp [label="Activity"]
+}
+@enduml
