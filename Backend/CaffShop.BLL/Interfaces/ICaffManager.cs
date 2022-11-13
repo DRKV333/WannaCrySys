@@ -22,5 +22,6 @@ namespace CaffShop.BLL.Interfaces
     Task<ValidationResult> AddNewCaff(int userId, CaffForEditingDto newCaffDto);
     Task<ValidationResult> EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto);
     Task<ValidationResult> DeleteCaff(int userId, int caffId);
+    Task<ValidationResult> DownloadCaffFile(int userId, int caffId);
   }
 }

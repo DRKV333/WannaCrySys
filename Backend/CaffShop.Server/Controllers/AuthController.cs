@@ -80,7 +80,7 @@ namespace Parking.Server.Controllers
     [HttpGet("GetTest")]
     public async Task<UserDto> GetTest()
     {
-        return new UserDto { Name = "Működik", Id = 1, Email = "Működő tesz email címe" };
+        return new UserDto { Name = "Működik", Id = 1, UserName = "Működő tesz email címe" };
     }
 
     [Authorize]

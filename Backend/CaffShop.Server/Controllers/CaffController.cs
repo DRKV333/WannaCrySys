@@ -156,5 +156,20 @@ namespace CaffShop.Server.Controllers
 
       return Ok();
     }
+
+    [HttpGet("DownloadCaffFile")]
+    public async Task<IActionResult> DownloadCaffFile(int caffId)
+    {
+      var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+      
+      ValidationResult result = await _caffManager.DownloadCaffFile(user.Id, caffId);
+
+      if (!result.IsSuccessful)
+      {
+        return BadRequest(result.Errors);
+      }
+
+      return Ok();
+    }
   }
 }
