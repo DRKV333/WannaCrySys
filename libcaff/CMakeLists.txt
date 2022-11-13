@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.22)
 project(libcaff LANGUAGES C CXX)
 
+set(DEFAULT_BUILD_TYPE "Debug")
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
+	set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+endif()
+
 option(LIBCAFF_STATIC "Link libcaff to caffrunner statically (for fuzzing)" OFF)
 
 set(SOURCEFILES
@@ -42,16 +49,16 @@ if(WIN32 AND (NOT LIBCAFF_STATIC))
 endif()
 
 if(MSVC)
-	target_compile_options(libcaff PRIVATE "/Wall" "/fsanitize=address")
-	target_compile_options(caffrunner PRIVATE "/Wall" "/fsanitize=address")
+	target_compile_options(libcaff PRIVATE "/Wall" "$<$<CONFIG:Debug>:/fsanitize=address>")
+	target_compile_options(caffrunner PRIVATE "/Wall" "$<$<CONFIG:Debug>:/fsanitize=address>")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	target_compile_options(libcaff PRIVATE "-Wall" "-pedantic")
 	target_compile_options(caffrunner PRIVATE "-Wall" "-pedantic")
 	if (NOT WIN32) # GCC does not support asan on windows. :(
-		target_compile_options(libcaff PRIVATE "-fsanitize=address")
-		target_compile_options(caffrunner PRIVATE "-fsanitize=address")
-		target_link_options(libcaff PRIVATE "-fsanitize=address")
-		target_link_options(caffrunner PRIVATE "-fsanitize=address")
+		target_compile_options(libcaff PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
+		target_compile_options(caffrunner PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
+		target_link_options(libcaff PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
+		target_link_options(caffrunner PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address>")
 	endif()
 endif()
 
