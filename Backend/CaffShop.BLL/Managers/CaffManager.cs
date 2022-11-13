@@ -181,7 +181,15 @@ namespace CaffShop.BLL.Managers
 
         var filePath = Path.Combine(directoryPath, uniqueFileName);
         newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
-        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\", uniqueImageName);
+
+        var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+        if (!Directory.Exists(imageDirectoryPath))
+        {
+          Directory.CreateDirectory(imageDirectoryPath);
+        }
+
+        var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
 
         bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
         if (!IsSuccessful)
@@ -255,7 +263,15 @@ namespace CaffShop.BLL.Managers
 
           var filePath = Path.Combine(directoryPath, uniqueFileName);
           newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
-          var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\", uniqueImageName);
+
+          var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+          if (!Directory.Exists(imageDirectoryPath))
+          {
+            Directory.CreateDirectory(imageDirectoryPath);
+          }
+
+          var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
 
           bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
           if (!IsSuccessful)
