@@ -38,7 +38,7 @@ namespace CaffShop.BLL.Managers
     {
       var claims = new List<Claim>
       {
-        new Claim(ClaimTypes.Name, user.Email)
+        new Claim(ClaimTypes.Name, user.UserName)
       };
 
       var roles = await _userManager.GetRolesAsync(user);
@@ -60,44 +60,6 @@ namespace CaffShop.BLL.Managers
         signingCredentials: signingCredentials);
 
       return tokenOptions;
-    }
-
-    public string GenerateRefreshToken()
-    {
-      var randomNumber = new byte[32];
-      using (var rng = RandomNumberGenerator.Create())
-      {
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
-      }
-    }
-
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-    {
-      var tokenValidationParameters = new TokenValidationParameters
-      {
-        ValidateAudience = false,
-        ValidateIssuer = false,
-        ValidateIssuerSigningKey = false,
-        IssuerSigningKey = new SymmetricSecurityKey(
-          Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value)),
-        ValidateLifetime = false,
-        ValidIssuer = _jwtSettings.GetSection("validIssuer").Value,
-        ValidAudience = _jwtSettings.GetSection("validAudience").Value,
-      };
-
-      var tokenHandler = new JwtSecurityTokenHandler();
-      SecurityToken securityToken;
-      var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-
-      var jwtSecurityToken = securityToken as JwtSecurityToken;
-      if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-        StringComparison.InvariantCultureIgnoreCase))
-      {
-        throw new SecurityTokenException("Invalid token");
-      }
-
-      return principal;
     }
   }
 }

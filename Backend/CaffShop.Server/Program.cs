@@ -13,6 +13,8 @@ using CaffShop.DAL;
 using CaffShop.DAL.Entities;
 using CaffShop.Server.Hosting;
 using Microsoft.OpenApi.Models;
+using CaffShop.Shared.CustomeDTOs;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,11 @@ builder.Services.AddAuthentication(opt =>
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
   };
 });
+
+var fileSettings = builder.Configuration.GetSection(nameof(FileSettings));
+builder.Services.Configure<FileSettings>(fileSettings);
+builder.Services.AddSingleton<IFileSettings>(sp => sp.GetRequiredService<IOptions<FileSettings>>().Value);
+
 builder.Services.AddSwaggerGen(option =>
 {
   option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });

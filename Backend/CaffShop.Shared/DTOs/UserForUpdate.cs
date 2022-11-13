@@ -9,9 +9,13 @@ namespace CaffShop.Shared.DTOs
 {
   public class UserForUpdate
   {
-    [Required(ErrorMessage = "Név kötelező")]
+    [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
 
+    [Required(ErrorMessage = "Password is required")]
     public string Password { get; set; }
+
+    [Compare("Password", ErrorMessage = "Value has to match with the given password")]
+    public string ConfirmPassword { get; set; }
   }
 }

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\CaffShop.BLL\CaffShop.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

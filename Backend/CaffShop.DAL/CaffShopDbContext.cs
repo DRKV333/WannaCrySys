@@ -18,7 +18,7 @@ namespace CaffShop.DAL
     }
     public override DbSet<User>? Users { get; set; }
     public DbSet<Caff> Caffs { get; set; }
-    public DbSet<Comment> Comment { get; set; }
+    public DbSet<Comment> Comments { get; set; }
     public DbSet<Purchase> Purchases { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

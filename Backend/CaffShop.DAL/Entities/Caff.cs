@@ -23,7 +23,7 @@ namespace CaffShop.DAL.Entities
     public int OwnerId { get; set; }
     public virtual User? Owner { get; set; }
     public string ImgURL { get; set; }
-    public string FilePath { get; set; }
+    public string FileName { get; set; }
     public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<Purchase> Purchases { get; set; }
   }

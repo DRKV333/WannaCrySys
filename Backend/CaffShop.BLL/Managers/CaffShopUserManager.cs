@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CaffShop.DAL;
 using CaffShop.DAL.Entities;
+using CaffShop.Shared.DTOs;
+using RecipeBook.Dal.Users;
 
 namespace CaffShop.BLL.Managers
 {
@@ -23,6 +25,20 @@ namespace CaffShop.BLL.Managers
     {
       _store = (UserStore<User, IdentityRole<int>, CaffShopDbContext, int, IdentityUserClaim<int>,
        IdentityUserRole<int>, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>)store;
+    }
+
+    public async Task<UserDto> GetUser(int userId) {
+      return (UserDto)_store.Context.Set<User>().Where(u => u.Id == userId).Select(u => new UserDto {
+        Id = userId,
+        UserName = u.UserName,
+        Name = u.Name,
+        Caffs = u.Caffs.Select(c => new CaffListItemDto
+        {
+          Id = c.Id,
+          Title = c.Title,
+          ImgURL = c.ImgURL
+        }).ToList()
+      });
     }
 
     public async Task<bool> IsInRoleByIdAsync(User user, int roleId, CancellationToken cancellationToken = default(CancellationToken))

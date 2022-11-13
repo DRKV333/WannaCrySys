@@ -4,9 +4,9 @@ using System.Text;
 
 namespace CaffShop.Shared
 {
-    public class ServerResponseDto
+    public class ValidationResult
     {
         public bool IsSuccessful { get; set; }
-        public IEnumerable<string> Errors { get; set; }
+        public List<string> Errors { get; set; }
     }
 }
