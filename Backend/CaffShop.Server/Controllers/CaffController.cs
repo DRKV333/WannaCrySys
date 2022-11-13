@@ -28,7 +28,7 @@ namespace CaffShop.Server.Controllers
     }
 
     [HttpGet("GetCaffList")]
-    public async Task<List<CaffListItemDto>> GetCaffList(string title)
+    public async Task<List<CaffListItemDto>> GetCaffList(string? title = "")
     {
       return await _caffManager.GetCaffList(title);
     }
@@ -106,13 +106,9 @@ namespace CaffShop.Server.Controllers
     }
 
     [HttpPost("AddNewCaff")]
+    [RequestSizeLimit(64000000)]
     public async Task<IActionResult> AddNewCaff([FromForm] CaffForEditingDto caffDto)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest();
-      }
-
       var user = await _userManager.FindByNameAsync(User.Identity?.Name);
       ValidationResult result = await _caffManager.AddNewCaff(user.Id, caffDto);
 
@@ -125,13 +121,9 @@ namespace CaffShop.Server.Controllers
     }
 
     [HttpPut("EditCaff")]
+    [RequestSizeLimit(64000000)]
     public async Task<IActionResult> EditCaff(int caffId, [FromForm] CaffForEditingDto caffDto)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest();
-      }
-
       var user = await _userManager.FindByNameAsync(User.Identity?.Name);
       ValidationResult result = await _caffManager.EditCaff(user.Id, caffId, caffDto);
 

@@ -27,11 +27,6 @@ namespace Parking.Server.Controllers
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] UserForRegistrationDto userForRegistration)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest();
-      }
-
       User user = new User
       {
         UserName = userForRegistration.Username,
@@ -81,11 +76,6 @@ namespace Parking.Server.Controllers
     [HttpPost("EditUser")]
     public async Task<IActionResult> EditUser([FromBody] UserForUpdate userDto)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest();
-      }
-
       var user = await _userManager.FindByNameAsync(User.Identity?.Name);
       user.Name = userDto.Name;
       await _userManager.UpdateAsync(user);

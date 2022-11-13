@@ -4,6 +4,7 @@ using CaffShop.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CaffShop.DAL.Migrations
 {
     [DbContext(typeof(CaffShopDbContext))]
-    partial class CaffShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221113144209_caff_guid")]
+    partial class caff_guid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,7 @@ namespace CaffShop.DAL.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Caffs", (string)null);
+                    b.ToTable("Caffs");
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>
@@ -90,7 +92,7 @@ namespace CaffShop.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.Purchase", b =>
@@ -118,7 +120,7 @@ namespace CaffShop.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Purchases", (string)null);
+                    b.ToTable("Purchases");
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.User", b =>

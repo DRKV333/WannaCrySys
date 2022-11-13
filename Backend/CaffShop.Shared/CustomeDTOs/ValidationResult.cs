@@ -7,6 +7,6 @@ namespace CaffShop.Shared
     public class ValidationResult
     {
         public bool IsSuccessful { get; set; }
-        public List<string> Errors { get; set; }
+        public List<string> Errors { get; set; } = new List<string>();
     }
 }
