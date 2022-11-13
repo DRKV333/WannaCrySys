@@ -14,12 +14,12 @@ COPY Backend/CaffShop.DAL/*.csproj ./CaffShop.DAL/
 COPY Backend/CaffShop.Shared/*.csproj ./CaffShop.Shared/
 COPY Backend/CaffShop.Server/*.csproj ./CaffShop.Server/ 
 
+RUN dotnet restore
+
 COPY Backend/CaffShop.BLL/. ./CaffShop.BLL/
 COPY Backend/CaffShop.DAL/. ./CaffShop.DAL/
 COPY Backend/CaffShop.Shared/. ./CaffShop.Shared/ 
 COPY Backend/CaffShop.Server/. ./CaffShop.Server/ 
-
-RUN dotnet restore
 
 COPY Backend/. ./
 RUN dotnet publish -c Release -o out 
@@ -34,7 +34,7 @@ WORKDIR /libcaff
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     gcc g++ libc6-dev cmake make \
-	&& apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 	
 COPY libcaff/. .
 
