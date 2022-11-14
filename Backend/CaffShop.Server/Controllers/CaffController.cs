@@ -3,11 +3,7 @@ using CaffShop.BLL.Managers;
 using CaffShop.Shared.DTOs;
 using CaffShop.Shared;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Parking.Server.Controllers;
-using System.Diagnostics;
-using System.Net;
 using Microsoft.AspNetCore.StaticFiles;
 
 namespace CaffShop.Server.Controllers

@@ -5,14 +5,7 @@ using CaffShop.Shared;
 using CaffShop.Shared.CustomeDTOs;
 using CaffShop.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CaffShop.BLL.Managers
 {
@@ -342,8 +335,6 @@ namespace CaffShop.BLL.Managers
             return result;
         }
 
-
-
         public async Task<FileValidationResult> DownloadCaffFile(int userId, int caffId)
         {
             FileValidationResult result = new FileValidationResult();
@@ -357,7 +348,7 @@ namespace CaffShop.BLL.Managers
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            if (_dbContext.Purchases.Any(p => p.CaffId == caffId && p.UserId == userId) && !(await _userManager.IsInRoleAsync(user, "Administrator")))
+            if (!_dbContext.Purchases.Any(p => p.CaffId == caffId && p.UserId == userId) && !(await _userManager.IsInRoleAsync(user, "Administrator")))
             {
                 result.Errors.Add($"User with ID: {userId} can not download this caff");
                 return result;
@@ -367,7 +358,7 @@ namespace CaffShop.BLL.Managers
             if (File.Exists(filePath))
             {
                 result.IsSuccessful = true;
-                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var bytes = await File.ReadAllBytesAsync(filePath);
                 result.CaffFile = bytes;
                 result.FullName = dbEntity.FileName;
                 result.FullPath = filePath;
