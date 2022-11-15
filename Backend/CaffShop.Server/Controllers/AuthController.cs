@@ -46,11 +46,11 @@ namespace Parking.Server.Controllers
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login(string username, string password)
+    public async Task<IActionResult> Login([FromBody]LoginInfo info)
     {
-      var user = await _userManager.FindByNameAsync(username);
+      var user = await _userManager.FindByNameAsync(info.Username);
 
-      if (user == null || !await _userManager.CheckPasswordAsync(user, password))
+      if (user == null || !await _userManager.CheckPasswordAsync(user, info.Password))
       {
         return Unauthorized("Invalid Authentication");
       }
