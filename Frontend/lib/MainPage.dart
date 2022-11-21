@@ -1,3 +1,4 @@
+import 'package:caff_parser/network/main_service.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -8,6 +9,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage>{
+
+  @override
+  void initState() {
+    super.initState();
+    MainService().getCaffList();
+  }
 
   @override
   Widget build(BuildContext context) {
