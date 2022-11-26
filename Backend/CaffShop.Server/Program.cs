@@ -20,10 +20,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<CaffShopDbContext>(db => db.UseSqlServer(builder.Configuration.GetConnectionString(nameof(CaffShopDbContext))));
-builder.Services.AddIdentity<User, IdentityRole<int>>()
+builder.Services.AddIdentity<User, IdentityRole<int>>(options => {
+  options.Password.RequireDigit = true;
+  options.Password.RequiredLength = 8;
+  options.Password.RequireNonAlphanumeric = true;
+  options.Password.RequireUppercase = true;
+  options.Password.RequireLowercase = true;
+})
   .AddEntityFrameworkStores<CaffShopDbContext>()
   .AddUserManager<CaffShopUserManager>()
   .AddDefaultTokenProviders();
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
