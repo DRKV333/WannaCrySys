@@ -5,9 +5,10 @@ class BorderedTextField extends StatefulWidget {
   final TextEditingController _controller;
   final TextInputType _inputType;
   late final bool _passwordText;
+  final Function? validateFun;
 
   BorderedTextField(this._controller, this._hintText, this._inputType,
-      {Key? key, bool passwordText = false})
+      {Key? key, bool passwordText = false, this.validateFun})
       : super(key: key) {
     _passwordText = passwordText;
   }
@@ -38,13 +39,16 @@ class _BorderedTextFieldState extends State<BorderedTextField> {
             border: const OutlineInputBorder(),
             suffixIcon: widget._passwordText
                 ? IconButton(
-                onPressed: () => setState(() {
-                  obscureText = !obscureText;
-                }),
-                icon: Icon(
-                    obscureText ? Icons.visibility_off : Icons.visibility))
+                    onPressed: () => setState(() {
+                          obscureText = !obscureText;
+                        }),
+                    icon: Icon(
+                        obscureText ? Icons.visibility_off : Icons.visibility))
                 : null),
         obscureText: obscureText,
+        validator: (value) {
+          return widget.validateFun != null ? widget.validateFun!(value) : null;
+        },
       ),
     );
   }

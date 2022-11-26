@@ -1,6 +1,7 @@
 import 'package:caff_parser/models/enums.dart';
 import 'package:caff_parser/models/user_for_registration_dto.dart';
 import 'package:caff_parser/providers/auth_provider.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:caff_parser/widgets/bordered_text_field.dart';
 import 'package:caff_parser/widgets/circular_button.dart';
 import 'package:caff_parser/widgets/great_bold_text.dart';
@@ -15,7 +16,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  late final AuthProvider _authProvider;
+  final GlobalKey<FormState> _registerFormKey = GlobalKey();
 
   late TextEditingController _nameController,
       _usernameController,
@@ -26,8 +27,6 @@ class _RegisterFormState extends State<RegisterForm> {
   void initState() {
     super.initState();
 
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
-
     _nameController = TextEditingController();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
@@ -35,41 +34,69 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(children: [
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 48.0),
-            child: const GreatBoldText(text: 'Register')),
-        BorderedTextField(_nameController, 'Name', TextInputType.name),
-        BorderedTextField(_usernameController, 'Username', TextInputType.text),
-        BorderedTextField(
-            _passwordController, 'Password', TextInputType.visiblePassword,
-            passwordText: true),
-        BorderedTextField(_confirmPasswordController, 'Confirm password',
-            TextInputType.visiblePassword,
-            passwordText: true),
-        Consumer<AuthProvider>(
-            builder: (context, authProvider, child) =>
-                Selector<AuthProvider, bool>(
-                  selector: (_, authProvider) => authProvider.isLoading,
-                  builder: (_, isLoading, __) => CircularButton(
-                    isLoading: isLoading,
-                    text: 'Register',
-                    onPressed: () async {
-                      // TODO: implement register logic
-                      await _authProvider.register(UserForRegistrationDto(
-                          name: _nameController.text,
-                          username: _usernameController.text,
-                          password: _passwordController.text,
-                          confirmPassword: _confirmPasswordController.text));
-                    },
-                  ),
-                )),
-        const SizedBox(height: 24.0),
-        CircularButton(
-          isLoading: false,
-          text: 'I have an account',
-          buttonColor: Colors.white54,
-          onPressed: () => _authProvider.changeAuthMode(AuthMode.login),
-        )
-      ]);
+  Widget build(BuildContext context) => Consumer<AuthProvider>(
+      builder: (context, authProvider, child) => Form(
+            key: _registerFormKey,
+            child: Column(children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 48.0),
+                  child: const GreatBoldText(text: 'Register')),
+              BorderedTextField(
+                _nameController,
+                'Name',
+                TextInputType.name,
+                validateFun: Globals.validateName,
+              ),
+              BorderedTextField(
+                _usernameController,
+                'Username',
+                TextInputType.text,
+                validateFun: Globals.validateUsername,
+              ),
+              BorderedTextField(
+                _passwordController,
+                'Password',
+                TextInputType.visiblePassword,
+                passwordText: true,
+                validateFun: Globals.validatePassword,
+              ),
+              BorderedTextField(
+                _confirmPasswordController,
+                'Confirm password',
+                TextInputType.visiblePassword,
+                passwordText: true,
+                validateFun: (value) => Globals.validateConfirmPassword(
+                    value, _passwordController.text),
+              ),
+              Selector<AuthProvider, bool>(
+                selector: (_, authProvider) => authProvider.isLoading,
+                builder: (_, isLoading, __) => CircularButton(
+                  isLoading: isLoading,
+                  text: 'Register',
+                  onPressed: () async {
+                    if (_registerFormKey.currentState?.validate() ?? false) {
+                      bool success = await authProvider.register(
+                          UserForRegistrationDto(
+                              name: _nameController.text.trim(),
+                              username:
+                                  _usernameController.text.trim().toLowerCase(),
+                              password: _passwordController.text.trim(),
+                              confirmPassword:
+                                  _confirmPasswordController.text.trim()));
+                      if (success) {
+                        authProvider.changeAuthMode(AuthMode.login);
+                      }
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 24.0),
+              CircularButton(
+                isLoading: false,
+                text: 'I have an account',
+                buttonColor: Colors.white54,
+                onPressed: () => authProvider.changeAuthMode(AuthMode.login),
+              )
+            ]),
+          ));
 }

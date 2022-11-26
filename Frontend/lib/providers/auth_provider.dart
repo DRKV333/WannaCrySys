@@ -58,7 +58,8 @@ class AuthProvider extends ProviderBase {
     changeLoadingStatus();
   }
 
-  Future<void> register(UserForRegistrationDto userForRegistrationDto) async {
+  Future<bool> register(UserForRegistrationDto userForRegistrationDto) async {
+    bool success = false;
     changeLoadingStatus();
 
     ApiResult? apiResult = await _authService.register(userForRegistrationDto);
@@ -66,6 +67,7 @@ class AuthProvider extends ProviderBase {
     if (apiResult != null) {
       if (apiResult.isSuccess) {
         Globals.showMessage('Successful registration');
+        success = true;
       } else {
         Globals.showMessage(apiResult.errorMessage!, true);
       }
@@ -74,6 +76,7 @@ class AuthProvider extends ProviderBase {
     }
 
     changeLoadingStatus();
+    return success;
   }
 
   Future<void> logout() async {

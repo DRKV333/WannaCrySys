@@ -1,6 +1,7 @@
 import 'package:caff_parser/models/enums.dart';
 import 'package:caff_parser/models/login_info.dart';
 import 'package:caff_parser/providers/auth_provider.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:caff_parser/widgets/bordered_text_field.dart';
 import 'package:caff_parser/widgets/circular_button.dart';
 import 'package:caff_parser/widgets/great_bold_text.dart';
@@ -15,7 +16,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  late final AuthProvider _authProvider;
+  final GlobalKey<FormState> _loginFormKey = GlobalKey();
 
   late TextEditingController _usernameController, _passwordController;
 
@@ -23,41 +24,51 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
 
-    _authProvider = Provider.of<AuthProvider>(context, listen: false);
-
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
   }
 
   @override
-  Widget build(BuildContext context) => Column(children: [
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 48.0),
-            child: const GreatBoldText(text: 'Login')),
-        BorderedTextField(_usernameController, 'Username', TextInputType.text),
-        BorderedTextField(
-            _passwordController, 'Password', TextInputType.visiblePassword,
-            passwordText: true),
-        Consumer<AuthProvider>(
-            builder: (context, authProvider, child) =>
-                Selector<AuthProvider, bool>(
-                  selector: (_, authProvider) => authProvider.isLoading,
-                  builder: (_, isLoading, __) => CircularButton(
-                    isLoading: isLoading,
-                    text: 'Login',
-                    onPressed: () async {
-                      // TODO: implement login logic
-                      await _authProvider.login(LoginInfo(
-                          username: _usernameController.text,
-                          password: _passwordController.text));
-                    },
-                  ),
-                )),
-        CircularButton(
-          isLoading: false,
-          text: "I don't have an account",
-          buttonColor: Colors.white54,
-          onPressed: () => _authProvider.changeAuthMode(AuthMode.register),
-        )
-      ]);
+  Widget build(BuildContext context) => Consumer<AuthProvider>(
+      builder: (context, authProvider, child) => Form(
+            key: _loginFormKey,
+            child: Column(children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 48.0),
+                  child: const GreatBoldText(text: 'Login')),
+              BorderedTextField(
+                  _usernameController, 'Username', TextInputType.text,
+                  validateFun: (value) =>
+                      Globals.validateUsername(value, validateRegExp: false)),
+              BorderedTextField(
+                _passwordController,
+                'Password',
+                TextInputType.visiblePassword,
+                passwordText: true,
+                validateFun: (value) =>
+                    Globals.validatePassword(value, validateRegExp: false),
+              ),
+              Selector<AuthProvider, bool>(
+                selector: (_, authProvider) => authProvider.isLoading,
+                builder: (_, isLoading, __) => CircularButton(
+                  isLoading: isLoading,
+                  text: 'Login',
+                  onPressed: () async {
+                    if (_loginFormKey.currentState?.validate() ?? false) {
+                      await authProvider.login(LoginInfo(
+                          username:
+                              _usernameController.text.trim().toLowerCase(),
+                          password: _passwordController.text.trim()));
+                    }
+                  },
+                ),
+              ),
+              CircularButton(
+                isLoading: false,
+                text: "I don't have an account",
+                buttonColor: Colors.white54,
+                onPressed: () => authProvider.changeAuthMode(AuthMode.register),
+              )
+            ]),
+          ));
 }
