@@ -38,13 +38,15 @@ namespace CaffShop.BLL.Managers
     {
       var claims = new List<Claim>
       {
-        new Claim("username", user.UserName)
-      };
+        new Claim("username", user.UserName),
+        new Claim(ClaimTypes.Name, user.UserName)
+    };
 
       var roles = await _userManager.GetRolesAsync(user);
       foreach (var role in roles)
       {
         claims.Add(new Claim("role", role));
+        claims.Add(new Claim(ClaimTypes.Role, role));
       }
 
       return claims;
