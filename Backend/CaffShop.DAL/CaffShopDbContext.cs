@@ -34,12 +34,13 @@ namespace CaffShop.DAL
       modelBuilder.Entity<User>(entity =>
       {
         entity.ToTable("Users");
-        entity.Property(e => e.Name).IsRequired().HasMaxLength(250);
+        entity.Property(e => e.Name).HasMaxLength(32).IsRequired();
+        entity.Property(e => e.UserName).HasMaxLength(64).IsRequired();
       });
 
       modelBuilder.Entity<Caff>(entity =>
       {
-        entity.Property(e => e.Title).IsRequired();
+        entity.Property(e => e.Title).HasMaxLength(128).IsRequired();
 
         entity.Property(e => e.CreatedDate)
           .HasColumnType("DATETIME2 (0)")
@@ -54,7 +55,7 @@ namespace CaffShop.DAL
 
       modelBuilder.Entity<Comment>(entity =>
       {
-        entity.Property(e => e.Content).IsRequired();
+        entity.Property(e => e.Content).HasMaxLength(256).IsRequired();
 
         entity.Property(e => e.CreatedDate)
           .HasColumnType("DATETIME2 (0)")

@@ -12,6 +12,8 @@ namespace CaffShop.Shared.DTOs
   public class CaffForEditingDto
   {
     [Required(ErrorMessage = "Title is required")]
+    [MinLength(8)]
+    [MaxLength(128)]
     public string Title { get; set; }
     [AllowNull]
     public IFormFile? CaffFile { get; set; } = null;
