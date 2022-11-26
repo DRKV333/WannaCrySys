@@ -39,6 +39,7 @@ dependencies:
   jwt_io: ^1.1.6
   shared_preferences: ^2.0.15
   file_picker: ^5.2.2
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
