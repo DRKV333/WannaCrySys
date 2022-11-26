@@ -1,12 +1,11 @@
-import 'package:caff_parser/models/user_dto.dart';
 import 'package:caff_parser/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UserDto userDto;
+  final String username;
 
-  const HomeScreen({Key? key, required this.userDto}) : super(key: key);
+  const HomeScreen({Key? key, required this.username}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -23,7 +22,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: Center(
-          child: Text(userDto.username.toString()),
+          child: Text(username),
         ),
       );
 }

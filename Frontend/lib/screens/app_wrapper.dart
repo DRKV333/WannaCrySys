@@ -1,8 +1,8 @@
-import 'package:caff_parser/models/user_dto.dart';
 import 'package:caff_parser/providers/auth_provider.dart';
 import 'package:caff_parser/screens/home_screen.dart';
 import 'package:caff_parser/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_io/jwt_io.dart';
 import 'package:provider/provider.dart';
 
 class AppWrapper extends StatefulWidget {
@@ -20,16 +20,20 @@ class _AppWrapperState extends State<AppWrapper> {
     super.initState();
 
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    // Trying to login when the app starts
+    _authProvider.isLoggedIn();
   }
 
   @override
-  Widget build(BuildContext context) => StreamBuilder(
-    stream: _authProvider.userStream,
-      builder: (BuildContext context, AsyncSnapshot<UserDto?> snapshot) {
-        UserDto? userDto = snapshot.data;
+  Widget build(BuildContext context) => StreamBuilder<String?>(
+    stream: _authProvider.tokenStream,
+      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+        String? token = snapshot.data;
 
-        if (userDto != null) {
-          return HomeScreen(userDto: userDto);
+        if (token != null) {
+          Map<String, dynamic> tokenPayload = JwtToken.payload(token);
+          return HomeScreen(username: tokenPayload['username']);
         }
 
         return const AuthScreen();
