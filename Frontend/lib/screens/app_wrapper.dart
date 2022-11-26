@@ -22,7 +22,7 @@ class _AppWrapperState extends State<AppWrapper> {
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     // Trying to login when the app starts
-    _authProvider.isLoggedIn();
+    _authProvider.checkForStoredToken();
   }
 
   @override

@@ -7,12 +7,10 @@ import 'package:caff_parser/models/user_dto.dart';
 import 'package:caff_parser/models/user_for_registration_dto.dart';
 import 'package:caff_parser/network/auth_service.dart';
 import 'package:caff_parser/providers/provider_base.dart';
-import 'package:jwt_io/jwt_io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ProviderBase {
   final AuthService _authService;
-  final SharedPreferences _sharedPreferences;
 
   AuthMode _authMode = AuthMode.login;
 
@@ -22,36 +20,20 @@ class AuthProvider extends ProviderBase {
 
   Stream<String?> get tokenStream => _tokenStreamController.stream;
 
-  AuthProvider(this._authService, this._sharedPreferences)
-      : super(_sharedPreferences);
+  AuthProvider(this._authService, SharedPreferences sharedPreferences)
+      : super(sharedPreferences);
 
   void changeAuthMode(AuthMode authMode) {
     _authMode = authMode;
     if (!isDisposed) notifyListeners();
   }
 
-  String? _getToken() => _sharedPreferences.getString('token');
+  Future<void> checkForStoredToken() async {
+    String? token = await isLoggedIn();
 
-  Future<bool> _removeToken() async {
-    return await _sharedPreferences.remove('token');
-  }
-
-  Future<bool> _saveToken(String token) async {
-    return await _sharedPreferences.setString('token', token);
-  }
-
-  Future<String?> isLoggedIn() async {
-    String? token = _getToken();
-
-    if (token == null) return null;
-
-    if (JwtToken.isExpired(token)) {
-      await _removeToken();
-      return null;
+    if (token != null) {
+      _tokenStreamController.add(token);
     }
-
-    _tokenStreamController.add(token);
-    return token;
   }
 
   Future<void> login(LoginInfo loginInfo) async {
@@ -63,7 +45,7 @@ class AuthProvider extends ProviderBase {
       if (apiResult.isSuccess) {
         String token = apiResult.data as String;
 
-        await _saveToken(token);
+        await saveToken(token);
         _tokenStreamController.add(token);
       } else {
         // TODO: show toast message
@@ -99,7 +81,7 @@ class AuthProvider extends ProviderBase {
   }
 
   Future<void> logout() async {
-    await _removeToken();
+    await removeToken();
     _tokenStreamController.add(null);
   }
 
