@@ -7,6 +7,7 @@ import 'package:caff_parser/models/user_dto.dart';
 import 'package:caff_parser/models/user_for_registration_dto.dart';
 import 'package:caff_parser/network/auth_service.dart';
 import 'package:caff_parser/providers/provider_base.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ProviderBase {
@@ -48,12 +49,10 @@ class AuthProvider extends ProviderBase {
         await saveToken(token);
         _tokenStreamController.add(token);
       } else {
-        // TODO: show toast message
-        print(apiResult.errorMessage);
+        Globals.showMessage(apiResult.errorMessage!, true);
       }
     } else {
-      // TODO: show toast message
-      print('Something went wrong');
+      Globals.showMessage('Something went wrong', true);
     }
 
     changeLoadingStatus();
@@ -66,15 +65,12 @@ class AuthProvider extends ProviderBase {
 
     if (apiResult != null) {
       if (apiResult.isSuccess) {
-        // TODO: show toast message
-        print('Successful registration');
+        Globals.showMessage('Successful registration');
       } else {
-        // TODO: show toast message
-        print(apiResult.errorMessage);
+        Globals.showMessage(apiResult.errorMessage!, true);
       }
     } else {
-      // TODO: show toast message
-      print('Something went wrong');
+      Globals.showMessage('Something went wrong', true);
     }
 
     changeLoadingStatus();
@@ -96,12 +92,10 @@ class AuthProvider extends ProviderBase {
         if (apiResult.isSuccess) {
           userDto = UserDto.fromJson(apiResult.data as Map<String, dynamic>);
         } else {
-          // TODO: show toast message
-          print(apiResult.errorMessage);
+          Globals.showMessage(apiResult.errorMessage!, true);
         }
       } else {
-        // TODO: show toast message
-        print('Something went wrong');
+        Globals.showMessage('Something went wrong', true);
       }
     }
 
