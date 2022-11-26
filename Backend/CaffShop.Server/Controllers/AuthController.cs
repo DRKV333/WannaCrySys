@@ -33,7 +33,7 @@ namespace Parking.Server.Controllers
         Name = userForRegistration.Name
       };
 
-      var result = await _userManager.CreateAsync(user, userForRegistration.Username);
+      var result = await _userManager.CreateAsync(user, userForRegistration.Password);
       if (!result.Succeeded)
       {
         var errors = result.Errors.Select(e => e.Description).ToList();
