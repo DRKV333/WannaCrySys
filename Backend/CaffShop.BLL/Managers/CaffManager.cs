@@ -67,6 +67,13 @@ namespace CaffShop.BLL.Managers
         throw new EntityNotFoundException($"Caff does not exist with the given ID: {caffId}");
       }
 
+      Purchase purchase = _dbContext.Purchases.Where(p => p.CaffId == caffId && p.UserId == userId).Select(p => p).FirstOrDefault();
+      if (purchase == null)
+      {
+        WatchLogger.Log($"The chosen caff is already purchased");
+        throw new ForbiddenException($"The chosen caff is already purchased");
+      }
+
       _dbContext.Purchases.Add(new Purchase
       {
         UserId = userId,
