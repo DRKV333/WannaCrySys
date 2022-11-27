@@ -6,6 +6,11 @@ using CaffShop.BLL.Interfaces;
 using CaffShop.Shared;
 using CaffShop.Shared.DTOs;
 using CaffShop.DAL.Entities;
+using System.Net;
+using CaffShop.Server.ExceptionHandler;
+using CaffShop.Shared.Exceptions;
+using WatchDog;
+using MySqlX.XDevAPI.Common;
 
 namespace Parking.Server.Controllers
 {
@@ -33,15 +38,14 @@ namespace Parking.Server.Controllers
         Name = userForRegistration.Name
       };
 
-      var result = await _userManager.CreateAsync(user, userForRegistration.Username);
+      var result = await _userManager.CreateAsync(user, userForRegistration.Password);
       if (!result.Succeeded)
       {
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        return BadRequest(errors);
+        WatchLogger.Log(result.Errors.First().Description);
+        throw new UnprocessableEntityException(result.Errors.First().Description);
       }
 
       await _userManager.AddToRoleAsync(user, "User");
-
       return StatusCode(201);
     }
 
@@ -52,7 +56,8 @@ namespace Parking.Server.Controllers
 
       if (user == null || !await _userManager.CheckPasswordAsync(user, info.Password))
       {
-        return Unauthorized("Invalid Authentication");
+        WatchLogger.Log("Invalid Authentication");
+        throw new AuthenticationException("Invalid Authentication");
       }
 
       var signingCredentials = _tokenManager.GetSigningCredentials();
@@ -68,24 +73,41 @@ namespace Parking.Server.Controllers
     [HttpGet("GetUser")]
     public async Task<UserDto> GetUser()
     {
-      var user = await _userManager.FindByNameAsync(User.Identity?.Name);
-      return await _userManager.GetUser(user.Id);
+      var currentUser = await _userManager.FindByNameAsync(User.Identity?.Name);
+      var user = await _userManager.GetUser(currentUser.Id);
+
+      if (user == null)
+      {
+        WatchLogger.Log($"User does not exist with the given ID: {currentUser.Id}");
+        throw new EntityNotFoundException($"User does not exist with the given ID: {currentUser.Id}");
+      }
+      return user;
     }
 
     [Authorize]
-    [HttpPost("EditUser")]
+    [HttpPut("EditUser")]
     public async Task<IActionResult> EditUser([FromBody] UserForUpdate userDto)
     {
       var user = await _userManager.FindByNameAsync(User.Identity?.Name);
       user.Name = userDto.Name;
-      await _userManager.UpdateAsync(user);
-      var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-      if (string.IsNullOrEmpty(userDto.Password))
+      var result = await _userManager.UpdateAsync(user);
+      if (!result.Succeeded)
       {
-        await _userManager.ResetPasswordAsync(user, token, userDto.Password);
+        WatchLogger.Log(result.Errors.First().Description);
+        throw new UnprocessableEntityException(result.Errors.First().Description);
       }
 
-      return Ok();
+      if (!string.IsNullOrEmpty(userDto.Password))
+      {
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        result = await _userManager.ResetPasswordAsync(user, token, userDto.Password);
+        if (!result.Succeeded)
+        {
+          WatchLogger.Log(result.Errors.First().Description);
+          throw new UnprocessableEntityException(result.Errors.First().Description);
+        }
+      }
+      return StatusCode(204);
     }
   }
 }

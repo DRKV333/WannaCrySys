@@ -28,7 +28,7 @@ namespace CaffShop.BLL.Managers
     }
 
     public async Task<UserDto> GetUser(int userId) {
-      return (UserDto)_store.Context.Set<User>().Where(u => u.Id == userId).Select(u => new UserDto {
+      var user = (UserDto)_store.Context.Set<User>().Where(u => u.Id == userId).Select(u => new UserDto {
         Id = userId,
         UserName = u.UserName,
         Name = u.Name,
@@ -39,6 +39,8 @@ namespace CaffShop.BLL.Managers
           ImgURL = c.ImgURL
         }).ToList()
       }).FirstOrDefault();
+
+      return user;
     }
 
     public async Task<bool> IsInRoleByIdAsync(User user, int roleId, CancellationToken cancellationToken = default(CancellationToken))
