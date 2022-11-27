@@ -28,7 +28,7 @@ namespace RecipeBook.Dal.SeedService
           Email = "admin@CaffShop.hu",
           Name = "Admin",
           SecurityStamp = Guid.NewGuid().ToString(),
-          UserName = "admin"
+          UserName = "CaffAdmin"
         };
 
         var createResult = await userManager.CreateAsync(user, "$Admin123");

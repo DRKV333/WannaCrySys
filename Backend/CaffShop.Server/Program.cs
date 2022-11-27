@@ -15,6 +15,11 @@ using CaffShop.Server.Hosting;
 using Microsoft.OpenApi.Models;
 using CaffShop.Shared.CustomeDTOs;
 using Microsoft.Extensions.Options;
+using CaffShop.Server.ExceptionHandler;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using WatchDog;
+using WatchDog.src.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +36,23 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options => {
   .AddUserManager<CaffShopUserManager>()
   .AddDefaultTokenProviders();
 
-
+builder.Services.AddControllers(options =>
+{
+  options.Filters.Add<ModelValidationFilter>();
+  options.Filters.Add<HttpResponseExceptionFilter>();
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddWatchDogServices(settings =>
+{
+  settings.IsAutoClear = true;
+  settings.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
+  settings.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
+  settings.SetExternalDbConnString = "Server=.\\sql2019;Database=CaffShop;Trusted_Connection=True;Integrated Security=True";
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddScoped<ITokenManager, TokenManager>();
 builder.Services.AddScoped<ICaffManager, CaffManager>();
@@ -61,7 +80,7 @@ builder.Services.AddAuthentication(opt =>
 var fileSettings = builder.Configuration.GetSection(nameof(FileSettings));
 builder.Services.Configure<FileSettings>(fileSettings);
 builder.Services.AddSingleton<IFileSettings>(sp => sp.GetRequiredService<IOptions<FileSettings>>().Value);
-
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
   option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -89,11 +108,13 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
 var app = builder.Build();
 
 await app.MigrateDatabaseAsync<CaffShopDbContext>();
 
 
+app.UseHttpLogging();
 /*if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
@@ -110,6 +131,13 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseWatchDogExceptionLogger();
+app.UseWatchDog(opt =>
+{
+  opt.WatchPageUsername = "admin";
+  opt.WatchPagePassword = "admin";
+});
 
 app.MapControllers();
 

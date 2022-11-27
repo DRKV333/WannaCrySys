@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileInfo = CaffShop.Shared.FileInfo;
 
 namespace CaffShop.BLL.Interfaces
 {
@@ -15,13 +16,13 @@ namespace CaffShop.BLL.Interfaces
   {
     Task<List<CaffListItemDto>> GetCaffList(string title);
     Task<CaffDto> GetCaff(int caffId);
-    Task<ValidationResult> PurchaseCaff(int userId, int caffId);
-    Task<ValidationResult> AddComment(int userId, int caffId, string content);
-    Task<ValidationResult> EditComment(int userId, int commentId, string newContent);
-    Task<ValidationResult> DeleteComment(int userId, int commentId);
-    Task<ValidationResult> AddNewCaff(int userId, CaffForEditingDto newCaffDto);
-    Task<ValidationResult> EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto);
-    Task<ValidationResult> DeleteCaff(int userId, int caffId);
-    Task<FileValidationResult> DownloadCaffFile(int userId, int caffId);
+    Task PurchaseCaff(int userId, int caffId);
+    Task AddComment(int userId, int caffId, string content);
+    Task EditComment(int userId, int commentId, string newContent);
+    Task DeleteComment(int userId, int commentId);
+    Task AddNewCaff(int userId, CaffForEditingDto newCaffDto);
+    Task EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto);
+    Task DeleteCaff(int userId, int caffId);
+    Task<FileInfo> DownloadCaffFile(int userId, int caffId);
   }
 }
