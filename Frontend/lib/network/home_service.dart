@@ -11,18 +11,16 @@ class HomeService extends ServiceBase {
 
   Future<ApiResult?> getCaffList(String token) async {
     ApiResult? result;
-
     try {
       Response response = await dio.get('/GetCaffList',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
-
-      if (response.statusCode == 201) {
+      print(response.statusCode);
+      if (response.statusCode == 200) {
         result = ApiResult();
       }
     } on DioError catch (e) {
       result = handleNetworkError(e);
     }
-
     return result;
   }
 }
