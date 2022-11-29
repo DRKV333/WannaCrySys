@@ -18,10 +18,9 @@ class HomeProvider extends ProviderBase {
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult = await _homeService.getCaffList(token);
-
       if (apiResult != null) {
         if (apiResult.isSuccess) {
-          test = "GOOD";
+          test = "TEST";
           notifyListeners();
           //userDto = UserDto.fromJson(apiResult.data as Map<String, dynamic>);
         } else {

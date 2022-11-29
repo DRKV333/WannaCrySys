@@ -1,7 +1,12 @@
-class CaffDTO{
-  int id;
-  String title;
-  String imgURL;
+class CaffDto {
+  final int id;
+  String? title;
+  String? imgURL;
 
-  CaffDTO(this.id, this.title, this.imgURL);
+  CaffDto({required this.id, this.title, this.imgURL});
+
+  factory CaffDto.fromJson(Map<String, dynamic> json) => CaffDto(
+    id: json['id'],
+    title: json['title'],
+    imgURL: json['imgURL'],);
 }

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class CaffCard extends StatelessWidget{
 
-  final int id;
   final String title;
   final String imgURL;
 
-  const CaffCard({Key? key, required this.id, required this.title, required this.imgURL}) : super(key: key);
+  const CaffCard({Key? key, required this.title, required this.imgURL}) : super(key: key);
 
 
   @override
@@ -14,15 +13,12 @@ class CaffCard extends StatelessWidget{
     return Card(
       child: Stack(
         children: [
-          /*GestureDetector(
-            onTap: (){},
-            child: SizedBox.expand(
+             SizedBox.expand(
               child: FittedBox(
                 fit: BoxFit.cover,
-                child: Image.network("src"),
+                child: Padding(padding: EdgeInsets.zero,)//Image.network(imgURL),
               ),
             ),
-          ),*/
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
