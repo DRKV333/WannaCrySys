@@ -15,7 +15,7 @@ namespace CaffShop.BLL.Interfaces
   public interface ICaffManager
   {
     Task<List<CaffListItemDto>> GetCaffList(string title);
-    Task<CaffDto> GetCaff(int caffId);
+    Task<CaffDto> GetCaff(int caffId, int userId);
     Task PurchaseCaff(int userId, int caffId);
     Task AddComment(int userId, int caffId, string content);
     Task EditComment(int userId, int commentId, string newContent);

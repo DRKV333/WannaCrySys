@@ -38,7 +38,8 @@ namespace CaffShop.Server.Controllers
     [HttpGet("GetCaff")]
     public async Task<CaffDto> GetCaff(int caffId)
     {
-      var caff = await _caffManager.GetCaff(caffId);
+      var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+      var caff = await _caffManager.GetCaff(caffId, user.Id);
 
       if (caff == null)
       {
