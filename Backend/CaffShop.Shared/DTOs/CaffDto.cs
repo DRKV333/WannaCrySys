@@ -15,5 +15,6 @@ namespace CaffShop.Shared.DTOs
     public string ImgURL { get; set; }
     public List<CommentDto> Comments { get; set; }
     public int NumberOfPurchases { get; set; }
+    public bool IsPurchased { get; set; }
   }
 }

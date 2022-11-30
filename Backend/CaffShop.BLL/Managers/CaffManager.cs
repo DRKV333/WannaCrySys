@@ -36,7 +36,7 @@ namespace CaffShop.BLL.Managers
       }).ToList();
     }
 
-    public async Task<CaffDto> GetCaff(int caffId)
+    public async Task<CaffDto> GetCaff(int caffId, int userId)
     {
       return _dbContext.Caffs.Where(p => p
       .Id == caffId).Select(p => new CaffDto
@@ -46,6 +46,7 @@ namespace CaffShop.BLL.Managers
         ImgURL = p.ImgURL,
         CreatedDate = p.CreatedDate,
         OwnerName = p.Owner.Name,
+        IsPurchased = p.Purchases.Any(t => t.UserId == userId),
         NumberOfPurchases = p.Purchases.Count,
         Comments = p.Comments.Select(c => new CommentDto
         {
