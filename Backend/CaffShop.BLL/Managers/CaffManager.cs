@@ -69,7 +69,7 @@ namespace CaffShop.BLL.Managers
       }
 
       Purchase purchase = _dbContext.Purchases.Where(p => p.CaffId == caffId && p.UserId == userId).Select(p => p).FirstOrDefault();
-      if (purchase == null)
+      if (purchase != null)
       {
         WatchLogger.Log($"The chosen caff is already purchased");
         throw new ForbiddenException($"The chosen caff is already purchased");
