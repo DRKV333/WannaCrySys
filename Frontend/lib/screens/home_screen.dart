@@ -57,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (BuildContext context, index) {
                   return GestureDetector(
                     onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                        return ChangeNotifierProvider(
-                            create: (BuildContext context) {CaffProvider;},
+                      Navigator.of(context).push(MaterialPageRoute(builder: (contextNavigator){
+                        return ChangeNotifierProvider.value(
+                            value: Provider.of<CaffProvider>(context, listen: false),
                             child: const CaffScreen(id: 10,));
                       }));
                     },

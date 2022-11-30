@@ -35,8 +35,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
         if (token != null) {
           Map<String, dynamic> tokenPayload = JwtToken.payload(token);
-          //return HomeScreen(username: tokenPayload['username']);
-          return const CaffScreen(id: 0);
+          return HomeScreen(username: tokenPayload['username']);
         }
         return const AuthScreen();
       }
