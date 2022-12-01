@@ -60,6 +60,18 @@ namespace CaffShop.DAL.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Caffs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FileName = "Test",
+                            ImgURL = "Test",
+                            OwnerId = 2,
+                            Title = "Caff test entity",
+                            UniqueFileName = "Test"
+                        });
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>

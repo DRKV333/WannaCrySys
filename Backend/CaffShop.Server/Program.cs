@@ -49,7 +49,7 @@ builder.Services.AddWatchDogServices(settings =>
   settings.IsAutoClear = true;
   settings.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
   settings.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-  settings.SetExternalDbConnString = "Server=db;Database=tempdb;User Id=SA;Password=S3cur3P@ssW0rd!;";
+  settings.SetExternalDbConnString = "Server=.\\sql2019;Database=CaffShop;Trusted_Connection=True;Integrated Security=True";
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -132,13 +132,19 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseWatchDogExceptionLogger();
-app.UseWatchDog(opt =>
-{
-  opt.WatchPageUsername = "admin";
-  opt.WatchPagePassword = "admin";
-});
-
 app.MapControllers();
+
+if (!app.Environment.IsDevelopment())
+{
+  app.UseWatchDogExceptionLogger();
+  app.UseWatchDog(opt =>
+  {
+    opt.WatchPageUsername = "admin";
+    opt.WatchPagePassword = "admin";
+  });
+}
+
+
+
 
 app.Run();

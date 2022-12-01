@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CaffShop.DAL.Migrations
 {
     [DbContext(typeof(CaffShopDbContext))]
-    [Migration("20221113013959_fixies")]
-    partial class fixies
+    [Migration("20221201202935_entities")]
+    partial class entities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,6 +50,11 @@ namespace CaffShop.DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("UniqueFileName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -57,6 +62,18 @@ namespace CaffShop.DAL.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Caffs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FileName = "Test",
+                            ImgURL = "Test",
+                            OwnerId = 2,
+                            Title = "Caff test entity",
+                            UniqueFileName = "Test"
+                        });
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>
@@ -72,7 +89,8 @@ namespace CaffShop.DAL.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -149,8 +167,8 @@ namespace CaffShop.DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -176,8 +194,9 @@ namespace CaffShop.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
