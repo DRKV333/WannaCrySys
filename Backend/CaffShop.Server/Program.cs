@@ -134,17 +134,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-if (!app.Environment.IsDevelopment())
-{
+
   app.UseWatchDogExceptionLogger();
   app.UseWatchDog(opt =>
   {
     opt.WatchPageUsername = "admin";
     opt.WatchPagePassword = "admin";
   });
-}
-
-
 
 
 app.Run();

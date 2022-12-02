@@ -14,7 +14,7 @@ namespace CaffShop.Server.Hosting
         var roleSeeder = scope.ServiceProvider.GetRequiredService<IRoleSeedService>();
         await roleSeeder.SeedRoleAsync();
         var userSeeder = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
-        await userSeeder.SeedUserAsync();
+        await userSeeder.SeedUserAsync();      
       }
       return host;
     }
