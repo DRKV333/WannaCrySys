@@ -41,7 +41,7 @@ namespace RecipeBook.Dal.SeedService
         }
       }
 
-      if (!(await userManager.GetUsersInRoleAsync(Roles.User)).Any(u => u.UserName == "TestUser"))
+      /*if (!(await userManager.GetUsersInRoleAsync(Roles.User)).Any(u => u.UserName == "TestUser"))
       {
         var user = new User
         {
@@ -59,7 +59,7 @@ namespace RecipeBook.Dal.SeedService
           throw new ApplicationException("User clould not be created:" +
               String.Join(", ", createResult.Errors.Concat(addToRoleResult.Errors).Select(e => e.Description)));
         }
-      }
+      }*/
     }
   }
 }

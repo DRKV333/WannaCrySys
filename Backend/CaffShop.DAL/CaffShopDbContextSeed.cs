@@ -12,7 +12,10 @@ namespace CaffShop.DAL
   {
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder) 
     {
-     modelBuilder.ApplyConfiguration(new CaffConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new CaffConfiguration());
     }
   }
 }

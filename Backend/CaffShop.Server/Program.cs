@@ -49,7 +49,7 @@ builder.Services.AddWatchDogServices(settings =>
   settings.IsAutoClear = true;
   settings.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
   settings.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-  settings.SetExternalDbConnString = "Server=.\\sql2019;Database=CaffShop;Trusted_Connection=True;Integrated Security=True";
+  settings.SetExternalDbConnString = "Server=db;Database=tempdb;User Id=SA;Password=S3cur3P@ssW0rd!;";
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -57,7 +57,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelS
 builder.Services.AddScoped<ITokenManager, TokenManager>();
 builder.Services.AddScoped<ICaffManager, CaffManager>();
 
-builder.Services.AddScoped<IRoleSeedService, RoleSeedService>();
 builder.Services.AddScoped<IUserSeedService, UserSeedService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

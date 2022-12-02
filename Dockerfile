@@ -13,7 +13,8 @@ COPY Backend/*.sln .
 COPY Backend/CaffShop.BLL/*.csproj ./CaffShop.BLL/
 COPY Backend/CaffShop.DAL/*.csproj ./CaffShop.DAL/
 COPY Backend/CaffShop.Shared/*.csproj ./CaffShop.Shared/
-COPY Backend/CaffShop.Server/*.csproj ./CaffShop.Server/ 
+COPY Backend/CaffShop.Server/*.csproj ./CaffShop.Server/
+COPY Backend/CaffShop.Test/*.csproj ./CaffShop.Test/
 
 RUN dotnet restore
 
@@ -21,6 +22,7 @@ COPY Backend/CaffShop.BLL/. ./CaffShop.BLL/
 COPY Backend/CaffShop.DAL/. ./CaffShop.DAL/
 COPY Backend/CaffShop.Shared/. ./CaffShop.Shared/ 
 COPY Backend/CaffShop.Server/. ./CaffShop.Server/ 
+COPY Backend/CaffShop.Test/. ./CaffShop.Test/ 
 
 COPY Backend/. ./
 RUN dotnet publish -c Release -o out 

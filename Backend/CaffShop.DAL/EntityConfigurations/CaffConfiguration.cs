@@ -15,7 +15,7 @@ namespace CaffShop.DAL.EntityConfigurations
     public void Configure(EntityTypeBuilder<Caff> builder)
     {
       builder.HasData(
-        new Caff { Id = 1, Title = "Caff test entity", OwnerId = 2, FileName = "Test", UniqueFileName = "Test", ImgURL = "Test" }
+        new Caff { Id = 1, OwnerId = 1, Title = "Caff test entity", FileName = "Test", UniqueFileName = "Test", ImgURL = "Test" }
       );
     }
   }
