@@ -26,7 +26,7 @@ namespace CaffShop.BLL.Managers
       _dbContext = dbContext;
     }
 
-    public List<CaffListItemDto> GetCaffList(string title)
+    public async Task<List<CaffListItemDto>> GetCaffList(string title)
     {
       return _dbContext.Caffs.Where(p => string.IsNullOrEmpty(title) || p.Title.Contains(title)).Select(p => new CaffListItemDto
       {
@@ -36,7 +36,7 @@ namespace CaffShop.BLL.Managers
       }).ToList();
     }
 
-    public CaffDto GetCaff(int caffId, int userId)
+    public async Task<CaffDto> GetCaff(int caffId, int userId)
     {
       return _dbContext.Caffs.Where(p => p
       .Id == caffId).Select(p => new CaffDto
@@ -59,7 +59,7 @@ namespace CaffShop.BLL.Managers
       }).FirstOrDefault();
     }
 
-    public void PurchaseCaff(int userId, int caffId)
+    public async Task PurchaseCaff(int userId, int caffId)
     {
       Caff dbEntity = _dbContext.Caffs.Find(caffId);
       if (dbEntity == null)
@@ -83,7 +83,7 @@ namespace CaffShop.BLL.Managers
       _dbContext.SaveChanges();
     }
 
-    public void AddComment(int userId, int caffId, string content)
+    public async Task AddComment(int userId, int caffId, string content)
     {
       if (string.IsNullOrEmpty(content))
       {
@@ -173,7 +173,7 @@ namespace CaffShop.BLL.Managers
     [DllImport("libcaff")]
     private static extern string libcaff_getLastError();
 
-    public void AddNewCaff(int userId, CaffForEditingDto newCaffDto)
+    public async Task AddNewCaff(int userId, CaffForEditingDto newCaffDto)
     {
       ValidationResult result = ValidateUploadedFile(newCaffDto.CaffFile);
       if (!result.IsSuccessful)
