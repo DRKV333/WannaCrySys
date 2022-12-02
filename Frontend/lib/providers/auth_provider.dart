@@ -45,7 +45,6 @@ class AuthProvider extends ProviderBase {
     if (apiResult != null) {
       if (apiResult.isSuccess) {
         String token = apiResult.data as String;
-
         await saveToken(token);
         _tokenStreamController.add(token);
       } else {
