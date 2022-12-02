@@ -12,7 +12,7 @@ namespace CaffShop.Server.Hosting
         scope.ServiceProvider.GetRequiredService<TContext>().Database.Migrate();
 
         var userSeeder = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
-        await userSeeder.SeedUserAsync();
+        await userSeeder.SeedUserAsync();      
       }
       return host;
     }

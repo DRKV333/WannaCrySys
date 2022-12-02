@@ -28,7 +28,7 @@ namespace CaffShop.BLL.Managers
 
     public async Task<List<CaffListItemDto>> GetCaffList(string title)
     {
-      return _dbContext.Caffs.Where(p => p.Title.Contains(title)).Select(p => new CaffListItemDto
+      return _dbContext.Caffs.Where(p => string.IsNullOrEmpty(title) || p.Title.Contains(title)).Select(p => new CaffListItemDto
       {
         Id = p.Id,
         Title = p.Title,
