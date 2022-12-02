@@ -8,7 +8,9 @@ namespace CaffShop.Server.ExceptionHandler
   {
     public int Order => int.MaxValue - 10;
 
-    public void OnActionExecuting(ActionExecutingContext context) { }
+    public void OnActionExecuting(ActionExecutingContext context) {
+      //Not necessary
+    }
 
     public void OnActionExecuted(ActionExecutedContext context)
     {

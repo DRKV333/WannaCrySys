@@ -20,13 +20,11 @@ namespace Parking.Server.Controllers
   {
     private readonly CaffShopUserManager _userManager;
     private readonly ITokenManager _tokenManager;
-    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(CaffShopUserManager userManager, ITokenManager tokenManager, IConfiguration configuration, ILogger<AuthController> logger)
+    public AuthController(CaffShopUserManager userManager, ITokenManager tokenManager, IConfiguration configuration)
     {
       _userManager = userManager;
       _tokenManager = tokenManager;
-      _logger = logger;
     }
 
     [HttpPost("Register")]

@@ -23,9 +23,10 @@ namespace CaffShop.DAL
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+      //Additional config
     }
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    partial void OnModelCreatingPartial(ModelBuilder builder);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

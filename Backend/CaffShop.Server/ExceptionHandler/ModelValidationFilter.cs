@@ -14,6 +14,8 @@ namespace CaffShop.Server.ExceptionHandler
       }
     }
 
-    public void OnActionExecuted(ActionExecutedContext context) { }
+    public void OnActionExecuted(ActionExecutedContext context) {
+      //Not necessary
+    }
   }
 }

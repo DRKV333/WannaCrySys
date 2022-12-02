@@ -20,13 +20,11 @@ namespace CaffShop.Server.Controllers
   {
     private readonly ICaffManager _caffManager;
     private readonly CaffShopUserManager _userManager;
-    private readonly ILogger<CaffController> _logger;
 
-    public CaffController(ICaffManager caffManager, CaffShopUserManager userManager, ILogger<CaffController> logger)
+    public CaffController(ICaffManager caffManager, CaffShopUserManager userManager)
     {
       _caffManager = caffManager;
       _userManager = userManager;
-      _logger = logger;
     }
 
     [HttpGet("GetCaffList")]

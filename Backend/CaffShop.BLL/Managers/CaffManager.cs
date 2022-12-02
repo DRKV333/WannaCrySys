@@ -26,7 +26,7 @@ namespace CaffShop.BLL.Managers
       _dbContext = dbContext;
     }
 
-    public async Task<List<CaffListItemDto>> GetCaffList(string title)
+    public List<CaffListItemDto> GetCaffList(string title)
     {
       return _dbContext.Caffs.Where(p => string.IsNullOrEmpty(title) || p.Title.Contains(title)).Select(p => new CaffListItemDto
       {
@@ -36,7 +36,7 @@ namespace CaffShop.BLL.Managers
       }).ToList();
     }
 
-    public async Task<CaffDto> GetCaff(int caffId, int userId)
+    public CaffDto GetCaff(int caffId, int userId)
     {
       return _dbContext.Caffs.Where(p => p
       .Id == caffId).Select(p => new CaffDto
@@ -59,7 +59,7 @@ namespace CaffShop.BLL.Managers
       }).FirstOrDefault();
     }
 
-    public async Task PurchaseCaff(int userId, int caffId)
+    public void PurchaseCaff(int userId, int caffId)
     {
       Caff dbEntity = _dbContext.Caffs.Find(caffId);
       if (dbEntity == null)
@@ -83,7 +83,7 @@ namespace CaffShop.BLL.Managers
       _dbContext.SaveChanges();
     }
 
-    public async Task AddComment(int userId, int caffId, string content)
+    public void AddComment(int userId, int caffId, string content)
     {
       if (string.IsNullOrEmpty(content))
       {
@@ -173,7 +173,7 @@ namespace CaffShop.BLL.Managers
     [DllImport("libcaff")]
     private static extern string libcaff_getLastError();
 
-    public async Task AddNewCaff(int userId, CaffForEditingDto newCaffDto)
+    public void AddNewCaff(int userId, CaffForEditingDto newCaffDto)
     {
       ValidationResult result = ValidateUploadedFile(newCaffDto.CaffFile);
       if (!result.IsSuccessful)
@@ -233,7 +233,7 @@ namespace CaffShop.BLL.Managers
 
     public async Task EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto)
     {
-      ValidationResult result = new ValidationResult();
+      ValidationResult result;
       if (newCaffDto.CaffFile != null && newCaffDto.CaffFile.Length > 0)
       {
         result = ValidateUploadedFile(newCaffDto.CaffFile);
@@ -243,7 +243,6 @@ namespace CaffShop.BLL.Managers
           throw new UnprocessableEntityException(result.Error);
         }
       }
-
       Caff dbEntity = _dbContext.Caffs.Where(c => c.Id == caffId).FirstOrDefault();
       if (dbEntity == null)
       {
