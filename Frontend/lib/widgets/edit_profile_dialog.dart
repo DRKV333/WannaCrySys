@@ -63,7 +63,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                       'Password',
                       TextInputType.visiblePassword,
                       passwordText: true,
-                      validateFun: Globals.validatePassword,
+                      validateFun: (value) =>
+                          Globals.validatePassword(value, required: false),
                     ),
                     BorderedTextField(
                       _confirmPasswordController,
@@ -71,7 +72,10 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                       TextInputType.visiblePassword,
                       passwordText: true,
                       validateFun: (value) => Globals.validateConfirmPassword(
-                          value, _passwordController.text),
+                        value,
+                        _passwordController.text,
+                        required: _passwordController.text.trim().isNotEmpty,
+                      ),
                     ),
                     Selector<AuthProvider, bool>(
                       selector: (_, authProvider) => authProvider.isLoading,
@@ -81,13 +85,21 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                         onPressed: () async {
                           if (_editProfileFormKey.currentState?.validate() ??
                               false) {
+                            String name = _nameController.text.trim();
+                            String? password = _passwordController.text.trim();
+                            String? confirmPassword =
+                                _confirmPasswordController.text.trim();
+
+                            if (password.isEmpty) {
+                              password = null;
+                              confirmPassword = null;
+                            }
+
                             bool success = await authProvider.editUser(
                                 UserForUpdateDto(
-                                    name: _nameController.text.trim(),
-                                    password: _passwordController.text.trim(),
-                                    confirmPassword: _confirmPasswordController
-                                        .text
-                                        .trim()));
+                                    name: name,
+                                    password: password,
+                                    confirmPassword: confirmPassword));
                             if (success) {
                               _navigateBack();
                             }
