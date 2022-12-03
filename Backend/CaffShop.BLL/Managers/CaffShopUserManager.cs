@@ -27,7 +27,7 @@ namespace CaffShop.BLL.Managers
        IdentityUserRole<int>, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>)store;
     }
 
-    public UserDto GetUser(int userId) {
+    public async Task<UserDto> GetUser(int userId) {
       var user = (UserDto)_store.Context.Set<User>().Where(u => u.Id == userId).Select(u => new UserDto {
         Id = userId,
         UserName = u.UserName,
