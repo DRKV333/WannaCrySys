@@ -2,6 +2,7 @@ import 'package:caff_parser/providers/auth_provider.dart';
 import 'package:caff_parser/providers/caff_provider.dart';
 import 'package:caff_parser/providers/home_provider.dart';
 import 'package:caff_parser/screens/caff_screen.dart';
+import 'package:caff_parser/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:caff_parser/widgets/caff_card.dart';
@@ -21,6 +22,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Provider.of<HomeProvider>(context, listen: false).getCaffList();
+  }
+
+  void _navigateToProfileScreen() {
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+                value: authProvider,
+                child: const ProfileScreen(),
+              )),
+    );
   }
 
   void _navigateToAddCaffScreen() {
@@ -43,12 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             centerTitle: true,
             title: const Text('Caff Parser'),
+            leading: IconButton(
+              onPressed: _navigateToProfileScreen,
+              tooltip: 'Profile',
+              icon: const Icon(Icons.account_circle),
+            ),
             actions: [
               IconButton(
                   onPressed: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();
                   },
+                  tooltip: 'Logout',
                   icon: const Icon(Icons.logout))
             ],
           ),
