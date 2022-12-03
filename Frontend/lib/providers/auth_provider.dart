@@ -5,6 +5,7 @@ import 'package:caff_parser/models/enums.dart';
 import 'package:caff_parser/models/login_info.dart';
 import 'package:caff_parser/models/user_dto.dart';
 import 'package:caff_parser/models/user_for_registration_dto.dart';
+import 'package:caff_parser/models/user_for_update_dto.dart';
 import 'package:caff_parser/network/auth_service.dart';
 import 'package:caff_parser/providers/provider_base.dart';
 import 'package:caff_parser/utils/globals.dart';
@@ -20,6 +21,10 @@ class AuthProvider extends ProviderBase {
   final StreamController<String?> _tokenStreamController = StreamController();
 
   Stream<String?> get tokenStream => _tokenStreamController.stream;
+
+  UserDto? _userDto;
+
+  UserDto? get userDto => _userDto;
 
   AuthProvider(this._authService, SharedPreferences sharedPreferences)
       : super(sharedPreferences);
@@ -83,8 +88,8 @@ class AuthProvider extends ProviderBase {
     _tokenStreamController.add(null);
   }
 
-  Future<UserDto?> getCurrentUser() async {
-    UserDto? userDto;
+  Future<void> getCurrentUser() async {
+    changeLoadingStatus();
 
     String? token = await isLoggedIn();
     if (token != null) {
@@ -92,7 +97,7 @@ class AuthProvider extends ProviderBase {
 
       if (apiResult != null) {
         if (apiResult.isSuccess) {
-          userDto = UserDto.fromJson(apiResult.data as Map<String, dynamic>);
+          _userDto = UserDto.fromJson(apiResult.data as Map<String, dynamic>);
         } else {
           Globals.showMessage(apiResult.errorMessage!, true);
         }
@@ -101,6 +106,31 @@ class AuthProvider extends ProviderBase {
       }
     }
 
-    return userDto;
+    changeLoadingStatus();
+  }
+
+  Future<bool> editUser(UserForUpdateDto userDto) async {
+    changeLoadingStatus();
+
+    bool success = false;
+
+    String? token = await isLoggedIn();
+    if (token != null) {
+      ApiResult? apiResult = await _authService.editUser(token, userDto);
+
+      if (apiResult != null) {
+        if (apiResult.isSuccess) {
+          success = true;
+          Globals.showMessage('Profile edited successfully');
+        } else {
+          Globals.showMessage(apiResult.errorMessage!, true);
+        }
+      } else {
+        Globals.showMessage('Something went wrong', true);
+      }
+    }
+
+    changeLoadingStatus();
+    return success;
   }
 }

@@ -24,7 +24,7 @@ class CircularButton extends StatelessWidget {
           style: buttonColor != null
               ? ElevatedButton.styleFrom(primary: buttonColor)
               : null,
-          onPressed: onPressed,
+          onPressed: isLoading ? null : onPressed,
           child: isLoading
               ? SizedBox(
                   height: 20,

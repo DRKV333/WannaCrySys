@@ -104,4 +104,25 @@ class Globals {
     if (value != matchWith) return 'Passwords do not match';
     return null;
   }
+
+  static String? validateTitle(String? value,
+      {bool required = true, bool validateRegExp = true}) {
+    if (required && (value == null || value.isEmpty)) {
+      return 'Title must be filled';
+    }
+    if (validateRegExp) {
+      if (value != null && value.isNotEmpty) {
+        value = value.trim();
+        int min = 8, max = 128;
+
+        if (!lengthRegExp(min, max).hasMatch(value)) {
+          return "Title's length must be between $min and $max";
+        }
+        if (containsNonAlphanumeric.hasMatch(value)) {
+          return 'Title must contain only alphanumeric characters';
+        }
+      }
+    }
+    return null;
+  }
 }
