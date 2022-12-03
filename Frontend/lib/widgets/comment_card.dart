@@ -1,8 +1,6 @@
 import 'package:caff_parser/models/comment_dto.dart';
 import 'package:flutter/material.dart';
 
-import 'circular_button.dart';
-
 class CommentCard extends StatelessWidget{
 
   final CommentDto comment;

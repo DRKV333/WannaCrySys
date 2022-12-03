@@ -1,12 +1,11 @@
 import 'package:caff_parser/providers/auth_provider.dart';
+import 'package:caff_parser/providers/caff_provider.dart';
+import 'package:caff_parser/screens/edit_caff_screen.dart';
 import 'package:caff_parser/utils/globals.dart';
 import 'package:caff_parser/widgets/comment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import '../providers/caff_provider.dart';
-import '../providers/home_provider.dart';
-import 'edit_caff_screen.dart';
 
 class CaffScreen extends StatefulWidget {
 
