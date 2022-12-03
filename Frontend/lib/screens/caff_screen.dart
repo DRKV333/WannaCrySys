@@ -118,7 +118,7 @@ class _CaffScreenState extends State<CaffScreen> {
                     child: caffProvider.caff.isPurchased ? const Text("Download") : const Text("Purchase")
                 ),
                 const Padding(padding: EdgeInsets.only(right: 20)),
-                caffProvider.canModify() ?
+                caffProvider.canModify(caffProvider.caff.isOwner) ?
                 GestureDetector(
                   onTap: (){
                     Navigator.of(context).push(
@@ -132,7 +132,7 @@ class _CaffScreenState extends State<CaffScreen> {
                   child: const Icon(Icons.edit),
                 ) : const Padding(padding: EdgeInsets.zero,),
                 const Padding(padding: EdgeInsets.only(right: 10)),
-                caffProvider.canModify() ?
+                caffProvider.canModify(caffProvider.caff.isOwner) ?
                 GestureDetector(
                   onTap: (){
                     showDialog(
@@ -193,7 +193,7 @@ class _CaffScreenState extends State<CaffScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index){
-                  return CommentCard(comment: caffProvider.commentList[index], canModify: caffProvider.canModify(),
+                  return CommentCard(comment: caffProvider.commentList[index], canModify: caffProvider.canModify(caffProvider.commentList[index].isOwner),
                       edit: (commentId, content) => caffProvider.editComment(commentId, content),
                       delete: (commentId)=> caffProvider.deleteComment(commentId),
                   );

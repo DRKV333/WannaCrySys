@@ -12,7 +12,7 @@ import '../models/comment_dto.dart';
 
 class CaffProvider extends ProviderBase {
   final CaffService _caffService;
-  CaffDetailsDto caff = CaffDetailsDto(id: 0, title: "", comments: [], isPurchased: false);
+  CaffDetailsDto caff = CaffDetailsDto(id: 0, title: "", comments: [], isPurchased: false, isOwner: false);
   List<CommentDto> commentList = <CommentDto>[];
   final TextEditingController commentController = TextEditingController();
   int caffId = 0;
@@ -206,7 +206,8 @@ class CaffProvider extends ProviderBase {
     }
   }
 
-  bool canModify(){
+  bool canModify(bool isOwner){
+    if(isOwner){return true;}
     String? token = getToken();
     if (token != null) {
       Map<String, dynamic> tokenPayload = JwtToken.payload(token);
