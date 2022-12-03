@@ -10,14 +10,14 @@ abstract class ServiceBase {
   ServiceBase() {
     String ip = '192.168.1.99';
     dio = Dio(BaseOptions(
-        baseUrl: 'https://$ip:8081', receiveDataWhenStatusError: true));
+        baseUrl: 'http://$ip:8080', receiveDataWhenStatusError: true));
 
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    /*(dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient dioClient) {
       dioClient.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       return dioClient;
-    };
+    };*/
   }
 
   ApiResult? handleNetworkError(DioError e) {

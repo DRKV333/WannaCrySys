@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       value: Provider.of<CaffProvider>(context, listen: false),
                                       child: CaffScreen(id: homeProvider.caffList[index].id)
                                   );
-                                }));
+                                })).then((_) => homeProvider.getCaffList());
                           },
                           child: CaffCard(
                             title: homeProvider.caffList[index].title,

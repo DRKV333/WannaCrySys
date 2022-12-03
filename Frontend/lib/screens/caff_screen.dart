@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../providers/caff_provider.dart';
+import '../providers/home_provider.dart';
+import 'edit_caff_screen.dart';
 
 class CaffScreen extends StatefulWidget {
 
@@ -101,11 +103,16 @@ class _CaffScreenState extends State<CaffScreen> {
               children: [
                 ElevatedButton(
                     onPressed: () async {
-                      var status = await Permission.storage.status;
-                      if(status.isDenied){
-                        await Permission.storage.request();
+                      if(caffProvider.caff.isPurchased){
+                        var status = await Permission.storage.status;
+                        if(status.isDenied){
+                          await Permission.storage.request();
+                        }
+                        caffProvider.downloadCaff();
                       }
-                      caffProvider.downloadCaff();
+                      else{
+                        caffProvider.purchaseCaff();
+                      }
                       },
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.lime),
                     child: caffProvider.caff.isPurchased ? const Text("Download") : const Text("Purchase")
@@ -113,7 +120,15 @@ class _CaffScreenState extends State<CaffScreen> {
                 const Padding(padding: EdgeInsets.only(right: 20)),
                 caffProvider.canModify() ?
                 GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => ChangeNotifierProvider.value(
+                            value: caffProvider,
+                            child: const EditCaffScreen(),
+                          )),
+                    ).then((_) => caffProvider.getCaff());
+                  },
                   child: const Icon(Icons.edit),
                 ) : const Padding(padding: EdgeInsets.zero,),
                 const Padding(padding: EdgeInsets.only(right: 10)),
@@ -133,6 +148,7 @@ class _CaffScreenState extends State<CaffScreen> {
                               ElevatedButton(
                                   onPressed: (){
                                     caffProvider.deleteCaff();
+                                    Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text("Delete")

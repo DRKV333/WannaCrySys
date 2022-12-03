@@ -38,7 +38,7 @@ class CaffService extends ServiceBase {
         formData.files.add(MapEntry('CaffFile', caffFile));
       }
 
-      Response response = await dio.post('/EditCaff',
+      Response response = await dio.put('/EditCaff',
           queryParameters: {'caffId': caffId},
           data: formData,
           options: Options(headers: {'Authorization': 'Bearer $token'}));
