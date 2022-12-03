@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using RecipeBook.Dal.SeedInterfaces;
-using RecipeBook.Dal.SeedService;
 using System.Text;
 using CaffShop.BLL.Interfaces;
 using CaffShop.BLL.Managers;
@@ -17,9 +13,10 @@ using CaffShop.Shared.CustomeDTOs;
 using Microsoft.Extensions.Options;
 using CaffShop.Server.ExceptionHandler;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WatchDog;
 using WatchDog.src.Enums;
+using CaffShop.Dal.SeedService;
+using CaffShop.Dal.SeedInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +52,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelS
 builder.Services.AddScoped<ITokenManager, TokenManager>();
 builder.Services.AddScoped<ICaffManager, CaffManager>();
 
+builder.Services.AddScoped<IRoleSeedService, RoleSeedService>();
 builder.Services.AddScoped<IUserSeedService, UserSeedService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -112,7 +110,6 @@ await app.MigrateDatabaseAsync<CaffShopDbContext>();
 
 
 app.UseHttpLogging();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -127,13 +124,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
-  app.UseWatchDogExceptionLogger();
-  app.UseWatchDog(opt =>
-  {
-    opt.WatchPageUsername = "admin";
-    opt.WatchPagePassword = "admin";
-  });
-
+app.UseWatchDogExceptionLogger();
+app.UseWatchDog(opt =>
+{
+  opt.WatchPageUsername = "CaffAdmin";
+  opt.WatchPagePassword = "$Admin123";
+});
 
 app.Run();

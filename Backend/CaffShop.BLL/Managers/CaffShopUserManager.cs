@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using CaffShop.DAL;
 using CaffShop.DAL.Entities;
 using CaffShop.Shared.DTOs;
-using RecipeBook.Dal.Users;
 
 namespace CaffShop.BLL.Managers
 {
