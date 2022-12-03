@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RecipeBook.Dal.SeedInterfaces;
+﻿using CaffShop.Dal.SeedInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CaffShop.Server.Hosting
 {
@@ -11,6 +11,8 @@ namespace CaffShop.Server.Hosting
       {
         scope.ServiceProvider.GetRequiredService<TContext>().Database.Migrate();
 
+        var roleSeeder = scope.ServiceProvider.GetRequiredService<IRoleSeedService>();
+        await roleSeeder.SeedRoleAsync();
         var userSeeder = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
         await userSeeder.SeedUserAsync();      
       }

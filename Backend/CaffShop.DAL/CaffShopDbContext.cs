@@ -16,7 +16,7 @@ namespace CaffShop.DAL
     public CaffShopDbContext(DbContextOptions options) : base(options)
     {
     }
-    public override DbSet<User>? Users { get; set; }
+    public override DbSet<User> Users { get; set; }
     public DbSet<Caff> Caffs { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Purchase> Purchases { get; set; }

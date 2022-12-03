@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecipeBook.Dal.Users
+namespace CaffShop.Dal
 {
     public class Roles
     {

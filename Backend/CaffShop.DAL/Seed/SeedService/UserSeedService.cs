@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RecipeBook.Dal.SeedInterfaces;
-using RecipeBook.Dal.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CaffShop.DAL.Entities;
+using CaffShop.Dal.SeedInterfaces;
 
-namespace RecipeBook.Dal.SeedService
+namespace CaffShop.Dal.SeedService
 {
   public class UserSeedService : IUserSeedService
   {
@@ -40,26 +39,6 @@ namespace RecipeBook.Dal.SeedService
               String.Join(", ", createResult.Errors.Concat(addToRoleResult.Errors).Select(e => e.Description)));
         }
       }
-
-      /*if (!(await userManager.GetUsersInRoleAsync(Roles.User)).Any(u => u.UserName == "TestUser"))
-      {
-        var user = new User
-        {
-          Email = "test@CaffShop.hu",
-          Name = "Test User",
-          SecurityStamp = Guid.NewGuid().ToString(),
-          UserName = "TestUser"
-        };
-
-        var createResult = await userManager.CreateAsync(user, "$Test123");
-        var addToRoleResult = await userManager.AddToRoleAsync(user, Roles.User);
-
-        if (!createResult.Succeeded || !addToRoleResult.Succeeded)
-        {
-          throw new ApplicationException("User clould not be created:" +
-              String.Join(", ", createResult.Errors.Concat(addToRoleResult.Errors).Select(e => e.Description)));
-        }
-      }*/
     }
   }
 }

@@ -231,31 +231,6 @@ namespace CaffShop.DAL.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "1e117783-7170-47cd-a20b-92ed75d5e03a", "Administrator", "ADMINISTRATOR" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "99664e4d-f6e0-4049-b8eb-b8f0118aaf8e", "User", "USER" });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "d573a016-651e-49d3-bb5f-f87a88ef31ba", "test@CaffShop.hu", false, true, null, "Test User", "TEST@CAFFSHOP.HU", "TESTUSER", "AQAAAAEAACcQAAAAEHlNBzcWsbKkUu26Mb4zd607WIad9JP/gM7a5iS/jzI+TRc5R8gBWrJMIUIyyts6Pg==", null, false, "SecurityStamp", false, "TestUser" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { 2, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Caffs",
-                columns: new[] { "Id", "FileName", "ImgURL", "OwnerId", "Title", "UniqueFileName" },
-                values: new object[] { 1, "Test", "Test", 1, "Caff test entity", "Test" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CaffShop.DAL.Migrations
 {
     [DbContext(typeof(CaffShopDbContext))]
-    [Migration("20221201223825_init")]
+    [Migration("20221203190654_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,18 +62,6 @@ namespace CaffShop.DAL.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Caffs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FileName = "Test",
-                            ImgURL = "Test",
-                            OwnerId = 1,
-                            Title = "Caff test entity",
-                            UniqueFileName = "Test"
-                        });
                 });
 
             modelBuilder.Entity("CaffShop.DAL.Entities.Comment", b =>
@@ -209,25 +197,6 @@ namespace CaffShop.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d573a016-651e-49d3-bb5f-f87a88ef31ba",
-                            Email = "test@CaffShop.hu",
-                            EmailConfirmed = false,
-                            LockoutEnabled = true,
-                            Name = "Test User",
-                            NormalizedEmail = "TEST@CAFFSHOP.HU",
-                            NormalizedUserName = "TESTUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHlNBzcWsbKkUu26Mb4zd607WIad9JP/gM7a5iS/jzI+TRc5R8gBWrJMIUIyyts6Pg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "SecurityStamp",
-                            TwoFactorEnabled = false,
-                            UserName = "TestUser"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -258,22 +227,6 @@ namespace CaffShop.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "1e117783-7170-47cd-a20b-92ed75d5e03a",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConcurrencyStamp = "99664e4d-f6e0-4049-b8eb-b8f0118aaf8e",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -358,13 +311,6 @@ namespace CaffShop.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 2
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>

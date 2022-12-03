@@ -46,12 +46,13 @@ namespace CaffShop.BLL.Managers
         ImgURL = p.ImgURL,
         CreatedDate = p.CreatedDate,
         OwnerName = p.Owner.Name,
+        IsOwner = userId == p.OwnerId,
         IsPurchased = p.Purchases.Any(t => t.UserId == userId),
         NumberOfPurchases = p.Purchases.Count,
         Comments = p.Comments.Select(c => new CommentDto
         {
           Id = c.Id,
-
+          IsOwner = userId == c.UserId,
           Content = c.Content,
           CreatedDate = c.CreatedDate,
           UserName = c.User.Name
@@ -182,53 +183,46 @@ namespace CaffShop.BLL.Managers
         throw new UnprocessableEntityException(result.Error);
       }
 
-      try
+      string guid = Guid.NewGuid().ToString();
+      string uniqueFileName = guid + ".caff";
+      string uniqueImageName = guid + ".png";
+      var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath);
+
+      if (!Directory.Exists(directoryPath))
       {
-        string guid = Guid.NewGuid().ToString();
-        string uniqueFileName = guid + ".caff";
-        string uniqueImageName = guid + ".png";
-        var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), _fileSettings.FilePath);
-
-        if (!Directory.Exists(directoryPath))
-        {
-          Directory.CreateDirectory(directoryPath);
-        }
-
-        var filePath = Path.Combine(directoryPath, uniqueFileName);
-        newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
-
-        var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-
-        if (!Directory.Exists(imageDirectoryPath))
-        {
-          Directory.CreateDirectory(imageDirectoryPath);
-        }
-
-        var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
-
-        bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
-        if (!IsSuccessful)
-        {
-          var error = libcaff_getLastError();
-          WatchLogger.Log(error);
-          throw new UnprocessableEntityException(error);
-        }
-
-        _dbContext.Caffs.Add(new Caff
-        {
-          Title = newCaffDto.Title,
-          OwnerId = userId,
-          FileName = newCaffDto.CaffFile.FileName,
-          UniqueFileName = uniqueFileName,
-          ImgURL = "images\\" + uniqueImageName
-        });
-
-        _dbContext.SaveChanges();
+        Directory.CreateDirectory(directoryPath);
       }
-      catch (Exception ex)
+
+      var filePath = Path.Combine(directoryPath, uniqueFileName);
+      newCaffDto.CaffFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+      var imageDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+      if (!Directory.Exists(imageDirectoryPath))
       {
-        throw new Exception(ex.Message);
+        Directory.CreateDirectory(imageDirectoryPath);
       }
+
+      var imagePath = Path.Combine(imageDirectoryPath, uniqueImageName);
+
+      bool IsSuccessful = libcaff_makePreview(filePath, imagePath);
+      if (!IsSuccessful)
+      {
+        var error = libcaff_getLastError();
+        WatchLogger.Log(error);
+        throw new UnprocessableEntityException(error);
+      }
+
+      _dbContext.Caffs.Add(new Caff
+      {
+        Title = newCaffDto.Title,
+        OwnerId = userId,
+        FileName = newCaffDto.CaffFile.FileName,
+        UniqueFileName = uniqueFileName,
+        ImgURL = "images/" + uniqueImageName
+      });
+
+      _dbContext.SaveChanges();
     }
 
     public async Task EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto)
@@ -356,8 +350,7 @@ namespace CaffShop.BLL.Managers
       }
 
       var user = await _userManager.FindByIdAsync(userId.ToString());
-
-      if (!_dbContext.Purchases.Any(p => p.CaffId == caffId && p.UserId == userId) && !(await _userManager.IsInRoleAsync(user, "Administrator")))
+      if (dbEntity.OwnerId != user.Id && !_dbContext.Purchases.Any(p => p.CaffId == caffId && p.UserId == userId) && !(await _userManager.IsInRoleAsync(user, "Administrator")))
       {
         WatchLogger.Log($"User with ID: {userId} can not access this caff file");
         throw new ForbiddenException($"You can not access this caff file");

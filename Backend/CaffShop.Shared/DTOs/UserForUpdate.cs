@@ -15,8 +15,8 @@ namespace CaffShop.Shared.DTOs
     [MaxLength(32, ErrorMessage = "Maximum 32 characters are allowed")]
     public string Name { get; set; }
     [AllowNull]
-    public string? Password { get; set; }
+    public string Password { get; set; }
     [AllowNull]
-    public string? ConfirmPassword { get; set; }
+    public string ConfirmPassword { get; set; }
   }
 }

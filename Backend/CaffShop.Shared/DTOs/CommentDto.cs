@@ -12,5 +12,6 @@ namespace CaffShop.Shared.DTOs
     public DateTime CreatedDate { get; set; }
     public string Content { get; set; }
     public string UserName { get; set; }
+    public bool IsOwner { get; set; }
   }
 }

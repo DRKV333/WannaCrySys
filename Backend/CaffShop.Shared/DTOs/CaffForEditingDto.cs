@@ -16,6 +16,6 @@ namespace CaffShop.Shared.DTOs
     [MaxLength(128)]
     public string Title { get; set; }
     [AllowNull]
-    public IFormFile? CaffFile { get; set; } = null;
+    public IFormFile CaffFile { get; set; } = null;
   }
 }

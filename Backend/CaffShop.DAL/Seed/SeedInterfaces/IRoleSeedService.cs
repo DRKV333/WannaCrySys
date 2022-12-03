@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace CaffShop.Dal.SeedInterfaces
 {
-    public interface IUserSeedService
-    {
-        Task SeedUserAsync();
-    }
+  public interface IRoleSeedService
+  {
+    Task SeedRoleAsync();
+  }
 }
