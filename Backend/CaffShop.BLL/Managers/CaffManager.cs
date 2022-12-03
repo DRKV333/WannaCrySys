@@ -182,8 +182,8 @@ namespace CaffShop.BLL.Managers
         throw new UnprocessableEntityException(result.Error);
       }
 
-     
-      
+      try
+      {
         string guid = Guid.NewGuid().ToString();
         string uniqueFileName = guid + ".caff";
         string uniqueImageName = guid + ".png";
@@ -224,8 +224,11 @@ namespace CaffShop.BLL.Managers
         });
 
         _dbContext.SaveChanges();
-      
-
+      }
+      catch (Exception ex)
+      {
+        throw new Exception(ex.Message);
+      }
     }
 
     public async Task EditCaff(int userId, int caffId, CaffForEditingDto newCaffDto)
