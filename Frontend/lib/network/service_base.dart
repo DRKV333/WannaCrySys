@@ -8,7 +8,7 @@ abstract class ServiceBase {
   late Dio dio;
 
   ServiceBase() {
-    String ip = '192.168.1.159';
+    String ip = '192.168.1.99';
     dio = Dio(BaseOptions(
         baseUrl: 'https://$ip:8081', receiveDataWhenStatusError: true));
 

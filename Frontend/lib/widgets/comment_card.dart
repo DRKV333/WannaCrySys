@@ -1,15 +1,18 @@
+import 'package:caff_parser/models/comment_dto.dart';
 import 'package:flutter/material.dart';
 
 import 'circular_button.dart';
 
 class CommentCard extends StatelessWidget{
 
-  final String name;
-  final String comment;
-  final Function() edit;
-  final Function() delete;
+  final CommentDto comment;
+  final bool canModify;
+  final Function(int, String) edit;
+  final Function(int) delete;
 
-  const CommentCard({Key? key, required this.name, required this.comment, required this.edit, required this.delete}) : super(key: key);
+  final TextEditingController controller = TextEditingController();
+
+  CommentCard({Key? key, required this.comment, required this.edit, required this.delete, required this.canModify}) : super(key: key);
 
 
   @override
@@ -25,24 +28,81 @@ class CommentCard extends StatelessWidget{
         padding: const EdgeInsets.all(25),
         child: Column(
           children: [
-            Text(name),
+            Text("${comment.userName} : ${comment.createdDate.substring(0,16)}"),
             const Padding(padding: EdgeInsets.only(top: 5)),
-            Text(comment),
+            Text(comment.content),
             const Padding(padding: EdgeInsets.only(top: 5)),
+            canModify ?
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: (){edit();},
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Edit comment"),
+                            content: TextField(
+                              keyboardType: TextInputType.multiline,
+                              minLines: 5,
+                              maxLines: 10,
+                              controller: controller,
+                              decoration: const InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.lime, width: 3.0)
+                                  )
+                              ),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: (){Navigator.of(context).pop();},
+                                  child: const Text("Cancel")
+                              ),
+                              ElevatedButton(
+                                  onPressed: (){
+                                      edit(comment.id, controller.text);
+                                      Navigator.of(context).pop();
+                                      controller.text = "";
+                                    },
+                                  child: const Text("Edit")
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  },
                   child: const Icon(Icons.edit),
                 ),
                 const Padding(padding: EdgeInsets.only(right: 10)),
                 GestureDetector(
-                  onTap: (){delete();},
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete comment"),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: (){Navigator.of(context).pop();},
+                                  child: const Text("Cancel")
+                              ),
+                              ElevatedButton(
+                                  onPressed: (){
+                                    delete(comment.id);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Delete")
+                              ),
+                            ],
+                          );
+                        }
+                    );
+                  },
                   child: const Icon(Icons.delete),
                 ),
               ],
-            )
+            ) : const Padding(padding: EdgeInsets.zero,),
           ],
         ),
       ),

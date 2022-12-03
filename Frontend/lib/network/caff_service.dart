@@ -66,15 +66,56 @@ class CaffService extends ServiceBase {
     return result;
   }
 
-  Future<ApiResult?> addComment(
-      String token, int caffId, String content) async {
+  Future<ApiResult?> deleteCaff(String token, int caffId) async {
+    ApiResult? result;
+    try {
+      Response response = await dio.delete('/DeleteCaff', queryParameters: {"caffId": caffId},
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      if (response.statusCode == 204) {
+        result = ApiResult(data: response.data);
+      }
+    } on DioError catch (e) {
+      result = handleNetworkError(e);
+    }
+    return result;
+  }
+
+  Future<ApiResult?> purchaseCaff(String token, int caffId) async {
+    ApiResult? result;
+    try {
+      Response response = await dio.post('/PurchaseCaff', queryParameters: {"caffId": caffId},
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      if (response.statusCode == 204) {
+        result = ApiResult(data: response.data);
+      }
+    } on DioError catch (e) {
+      result = handleNetworkError(e);
+    }
+    return result;
+  }
+
+  Future<ApiResult?> downloadCaff(String token, int caffId, String title) async {
+    ApiResult? result;
+    try {
+      Response response = await dio.download('/DownloadCaffFile', "/storage/emulated/0/Download/$title.caff", queryParameters: {"caffId": caffId},
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      if (response.statusCode == 200) {
+        result = ApiResult();
+      }
+    } on DioError catch (e) {
+      result = handleNetworkError(e);
+    }
+    return result;
+  }
+
+  Future<ApiResult?> addComment(String token, int caffId, String content) async {
     ApiResult? result;
     try {
       Response response = await dio.post('/AddComment',
           queryParameters: {"caffId": caffId, "content": content},
           options: Options(headers: {'Authorization': 'Bearer $token'}));
-      if (response.statusCode == 200) {
-        result = ApiResult();
+      if (response.statusCode == 201) {
+        result = ApiResult(data: response.data);
       }
     } on DioError catch (e) {
       result = handleNetworkError(e);
@@ -89,7 +130,7 @@ class CaffService extends ServiceBase {
       Response response = await dio.put('/EditComment',
           queryParameters: {"commentId": commentId, "content": content},
           options: Options(headers: {'Authorization': 'Bearer $token'}));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = ApiResult();
       }
     } on DioError catch (e) {
@@ -104,7 +145,7 @@ class CaffService extends ServiceBase {
       Response response = await dio.delete('/DeleteComment',
           queryParameters: {"commentId": commentId},
           options: Options(headers: {'Authorization': 'Bearer $token'}));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = ApiResult();
       }
     } on DioError catch (e) {

@@ -4,10 +4,11 @@ class CaffDetailsDto {
   String? createdDate;
   String? ownerName;
   String? imgURL;
-  List? comments;
+  List comments;
   int? numberOfPurchases;
+  bool isPurchased;
 
-  CaffDetailsDto({required this.id, this.title, this.createdDate, this.ownerName, this.imgURL, this.comments, this.numberOfPurchases});
+  CaffDetailsDto({required this.id, this.title, this.createdDate, this.ownerName, this.imgURL, required this.comments, this.numberOfPurchases, required this.isPurchased});
 
   factory CaffDetailsDto.fromJson(Map<String, dynamic> json) => CaffDetailsDto(
       id: json['id'],
@@ -16,5 +17,7 @@ class CaffDetailsDto {
       ownerName: json['ownerName'],
       imgURL: json['imgURL'],
       comments: json['comments'],
-      numberOfPurchases: json['numberOfPurchases'],);
+      numberOfPurchases: json['numberOfPurchases'],
+      isPurchased: json['isPurchased'],
+  );
 }

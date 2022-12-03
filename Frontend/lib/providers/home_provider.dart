@@ -1,28 +1,35 @@
+import 'package:caff_parser/models/caff_dto.dart';
 import 'package:caff_parser/providers/provider_base.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/api_result.dart';
 import '../network/home_service.dart';
 import '../utils/globals.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeProvider extends ProviderBase {
 
   final HomeService _homeService;
-  List<ApiResult> CaffList = <ApiResult>[];
+
+  List<CaffDto> caffList = <CaffDto>[];
+  final TextEditingController searchController = TextEditingController();
 
   HomeProvider(this._homeService, SharedPreferences sharedPreferences) : super(sharedPreferences);
 
-  String test = "";
 
   Future<void> getCaffList() async {
 
     String? token = await isLoggedIn();
     if (token != null) {
-      ApiResult? apiResult = await _homeService.getCaffList(token);
+      ApiResult? apiResult = await _homeService.getCaffList(token, searchController.text);
       if (apiResult != null) {
         if (apiResult.isSuccess) {
-          test = "TEST";
+          caffList.clear();
+          for(var c in apiResult.data){
+            CaffDto temp = CaffDto.fromJson(c as Map<String, dynamic>);
+            temp.imgURL = "http://192.168.1.99:8080/${temp.imgURL.split('\\').join('/')}";
+            caffList.add(temp);
+          }
           notifyListeners();
-          //userDto = UserDto.fromJson(apiResult.data as Map<String, dynamic>);
         } else {
           Globals.showMessage(apiResult.errorMessage!, true);
         }
