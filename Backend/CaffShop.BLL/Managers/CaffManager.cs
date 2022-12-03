@@ -379,7 +379,6 @@ namespace CaffShop.BLL.Managers
     private ValidationResult ValidateUploadedFile(IFormFile file)
     {
       ValidationResult result = new ValidationResult();
-      result.IsSuccessful = true;
 
       if (file == null || file.Length == 0)
       {
