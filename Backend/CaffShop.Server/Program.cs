@@ -48,8 +48,6 @@ builder.Services.AddWatchDogServices(settings =>
 {
   settings.IsAutoClear = true;
   settings.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
-  settings.SqlDriverOption = WatchDogSqlDriverEnum.MSSQL;
-  settings.SetExternalDbConnString = "Server=db;Database=tempdb;User Id=SA;Password=S3cur3P@ssW0rd!;";
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -114,11 +112,9 @@ await app.MigrateDatabaseAsync<CaffShopDbContext>();
 
 
 app.UseHttpLogging();
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
