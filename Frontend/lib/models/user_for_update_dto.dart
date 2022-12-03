@@ -1,16 +1,22 @@
 class UserForUpdateDto {
   String name;
-  String password;
-  String confirmPassword;
+  String? password;
+  String? confirmPassword;
 
-  UserForUpdateDto(
-      {required this.name,
-      required this.password,
-      required this.confirmPassword});
+  UserForUpdateDto({
+    required this.name,
+    this.password,
+    this.confirmPassword,
+  });
 
-  Map<String, String> toJson() => {
-        'name': name,
-        'password': password,
-        'confirmPassword': confirmPassword,
-      };
+  Map<String, String> toJson() {
+    Map<String, String> json = {'name': name};
+
+    if (password != null && confirmPassword != null) {
+      json['password'] = password!;
+      json['confirmPassword'] = confirmPassword!;
+    }
+
+    return json;
+  }
 }
