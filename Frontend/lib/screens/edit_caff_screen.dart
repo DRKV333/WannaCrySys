@@ -6,14 +6,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddCaffScreen extends StatefulWidget {
-  const AddCaffScreen({Key? key}) : super(key: key);
+class EditCaffScreen extends StatefulWidget {
+  const EditCaffScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddCaffScreen> createState() => _AddCaffScreenState();
+  State<EditCaffScreen> createState() => _EditCaffScreenState();
 }
 
-class _AddCaffScreenState extends State<AddCaffScreen> {
+class _EditCaffScreenState extends State<EditCaffScreen> {
   final GlobalKey<FormState> _addCaffFormKey = GlobalKey();
 
   late TextEditingController _titleController;
@@ -47,7 +47,7 @@ class _AddCaffScreenState extends State<AddCaffScreen> {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       centerTitle: true,
-      title: const Text('Add new CAFF'),
+      title: const Text('Edit CAFF'),
     ),
     body: Container(
       margin: const EdgeInsets.all(16.0),
@@ -87,16 +87,13 @@ class _AddCaffScreenState extends State<AddCaffScreen> {
             Consumer<CaffProvider>(
               builder: (_, caffProvider, __) => CircularButton(
                 isLoading: caffProvider.isLoading,
-                text: 'Upload',
+                text: 'Edit',
                 onPressed: () async {
                   if (_addCaffFormKey.currentState?.validate() ?? false) {
-                    if (_pickedFile == null) {
-                      Globals.showMessage('File must be chosen', true);
-                      return;
-                    }
 
-                    bool success = await caffProvider.createCaff(
-                      _pickedFile!,
+                    bool success = await caffProvider.editCaff(
+                      caffProvider.caffId,
+                      _pickedFile,
                       _titleController.text,
                     );
                     if (success) {

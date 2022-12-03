@@ -1,16 +1,15 @@
 import 'dart:io';
-
 import 'package:caff_parser/models/api_result.dart';
-import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
+import '../utils/globals.dart';
 
 abstract class ServiceBase {
   late Dio dio;
 
   ServiceBase() {
-    String ip = '192.168.1.159';
     dio = Dio(BaseOptions(
-        baseUrl: 'https://$ip:8081', receiveDataWhenStatusError: true));
+        baseUrl: Globals.baseIp, receiveDataWhenStatusError: true));
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient dioClient) {

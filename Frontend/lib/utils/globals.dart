@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Globals {
   static final Globals _instance = Globals();
+  static const String baseIp = 'https://192.168.1.99:8081';
 
   factory Globals() {
     return _instance;

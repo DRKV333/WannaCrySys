@@ -11,21 +11,25 @@ class CaffCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
+      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: Stack(
         children: [
              SizedBox.expand(
               child: FittedBox(
                 fit: BoxFit.cover,
-                child: Padding(padding: EdgeInsets.zero,)//Image.network(imgURL),
+                child: Image.network(imgURL),
               ),
             ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.only(bottom: 10, top: 5),
               color: Colors.lime,
-              child: Center(child: Text(title)),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, left: 10),
+                child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
             ),
           )
         ],
