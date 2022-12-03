@@ -1,4 +1,5 @@
 import 'package:caff_parser/providers/auth_provider.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:caff_parser/widgets/comment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -61,7 +62,7 @@ class _CaffScreenState extends State<CaffScreen> {
                   decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage("http://192.168.1.99:8080/${caffProvider.caff.imgURL!}")
+                    image: NetworkImage("${Globals.baseIp}/${caffProvider.caff.imgURL!}")
                   )
                 ),
               )

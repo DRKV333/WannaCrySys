@@ -26,7 +26,7 @@ class HomeProvider extends ProviderBase {
           caffList.clear();
           for(var c in apiResult.data){
             CaffDto temp = CaffDto.fromJson(c as Map<String, dynamic>);
-            temp.imgURL = "http://192.168.1.99:8080/${temp.imgURL.split('\\').join('/')}";
+            temp.imgURL = "${Globals.baseIp}/${temp.imgURL.split('\\').join('/')}";
             caffList.add(temp);
           }
           notifyListeners();
