@@ -126,4 +126,22 @@ class Globals {
     }
     return null;
   }
+
+  static String? validateComment(String? value,
+      {bool required = true, bool validateRegExp = true}) {
+    if (required && (value == null || value.isEmpty)) {
+      return 'Comment must be filled';
+    }
+    if (validateRegExp) {
+      if (value != null && value.isNotEmpty) {
+        value = value.trim();
+        int min = 1, max = 256;
+
+        if (!lengthRegExp(min, max).hasMatch(value)) {
+          return "Comment's length must be between $min and $max";
+        }
+      }
+    }
+    return null;
+  }
 }

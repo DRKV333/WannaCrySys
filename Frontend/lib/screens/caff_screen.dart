@@ -16,6 +16,8 @@ class CaffScreen extends StatefulWidget {
 }
 
 class _CaffScreenState extends State<CaffScreen> {
+  final GlobalKey<FormState> _addCommentFormKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -192,25 +194,33 @@ class _CaffScreenState extends State<CaffScreen> {
                             color: Colors.lime,
                             thickness: 10,
                           ),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: TextField(
-                                keyboardType: TextInputType.multiline,
-                                controller: caffProvider.commentController,
-                                minLines: 5,
-                                maxLines: 10,
-                                decoration: const InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.lime, width: 3.0))),
-                              )),
+                          Form(
+                            key: _addCommentFormKey,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.multiline,
+                                  controller: caffProvider.commentController,
+                                  minLines: 5,
+                                  maxLines: 10,
+                                  validator: Globals.validateComment,
+                                  decoration: const InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.lime, width: 3.0))),
+                                )),
+                          ),
                           Align(
                             alignment: Alignment.topCenter,
                             child: ElevatedButton(
                               onPressed: () {
-                                caffProvider.addComment(widget.id,
-                                    caffProvider.commentController.text);
+                                if (_addCommentFormKey.currentState
+                                        ?.validate() ??
+                                    false) {
+                                  caffProvider.addComment(widget.id,
+                                      caffProvider.commentController.text);
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.lime),

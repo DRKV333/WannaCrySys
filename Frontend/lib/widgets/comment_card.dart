@@ -1,4 +1,5 @@
 import 'package:caff_parser/models/comment_dto.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:flutter/material.dart';
 
 class CommentCard extends StatelessWidget {
@@ -8,6 +9,8 @@ class CommentCard extends StatelessWidget {
   final Function(int) delete;
 
   final TextEditingController controller = TextEditingController();
+
+  final GlobalKey<FormState> _editCommentFormKey = GlobalKey();
 
   CommentCard(
       {Key? key,
@@ -42,16 +45,20 @@ class CommentCard extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text("Edit comment"),
-                                  content: TextField(
-                                    keyboardType: TextInputType.multiline,
-                                    minLines: 5,
-                                    maxLines: 10,
-                                    controller: controller,
-                                    decoration: const InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.lime,
-                                                width: 3.0))),
+                                  content: Form(
+                                    key: _editCommentFormKey,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.multiline,
+                                      minLines: 5,
+                                      maxLines: 10,
+                                      validator: Globals.validateComment,
+                                      controller: controller,
+                                      decoration: const InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.lime,
+                                                  width: 3.0))),
+                                    ),
                                   ),
                                   actions: [
                                     ElevatedButton(
@@ -61,9 +68,13 @@ class CommentCard extends StatelessWidget {
                                         child: const Text("Cancel")),
                                     ElevatedButton(
                                         onPressed: () {
-                                          edit(comment.id, controller.text);
-                                          Navigator.of(context).pop();
-                                          controller.text = "";
+                                          if (_editCommentFormKey.currentState
+                                                  ?.validate() ??
+                                              false) {
+                                            edit(comment.id, controller.text);
+                                            Navigator.of(context).pop();
+                                            controller.text = "";
+                                          }
                                         },
                                         child: const Text("Edit")),
                                   ],
