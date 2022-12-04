@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Scaffold(
               appBar: AppBar(
                 centerTitle: true,
-                title: const Text('Caff Parser'),
+                title: const Text('CAFF Store'),
                 leading: IconButton(
                   onPressed: _navigateToProfileScreen,
                   tooltip: 'Profile',
