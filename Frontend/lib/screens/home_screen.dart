@@ -96,35 +96,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Text("Search")),
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Expanded(
-                      child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  childAspectRatio: 2 / 2.5,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 10),
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          itemCount: homeProvider.caffList.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (contextNavigator) {
-                                  return ChangeNotifierProvider.value(
-                                      value: Provider.of<CaffProvider>(context,
-                                          listen: false),
-                                      child: CaffScreen(
-                                          id: homeProvider.caffList[index].id));
-                                })).then((_) => homeProvider.getCaffList());
-                              },
-                              child: CaffCard(
-                                title: homeProvider.caffList[index].title,
-                                imgURL: homeProvider.caffList[index].imgURL,
-                              ),
-                            );
-                          }))
+                    child: homeProvider.caffList.isNotEmpty
+                        ? GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    childAspectRatio: 2 / 2.5,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 10),
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            itemCount: homeProvider.caffList.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (contextNavigator) {
+                                    return ChangeNotifierProvider.value(
+                                        value: Provider.of<CaffProvider>(
+                                            context,
+                                            listen: false),
+                                        child: CaffScreen(
+                                            id: homeProvider
+                                                .caffList[index].id));
+                                  })).then((_) => homeProvider.getCaffList());
+                                },
+                                child: CaffCard(
+                                  title: homeProvider.caffList[index].title,
+                                  imgURL: homeProvider.caffList[index].imgURL,
+                                ),
+                              );
+                            })
+                        : const Center(
+                            child: Text('No CAFFs were found'),
+                          ),
+                  )
                 ],
               ),
               floatingActionButton: FloatingActionButton(
