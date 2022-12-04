@@ -66,16 +66,6 @@ class _CaffScreenState extends State<CaffScreen> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 7),
-                              child: Text(
-                                "Title: ${caffProvider.caff.title}",
-                                style: const TextStyle(fontSize: 17),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
                               padding: const EdgeInsets.only(left: 7, top: 2),
                               child: Text(
                                 "Created: ${caffProvider.caff.createdDate?.substring(0, 10)}",
@@ -127,8 +117,8 @@ class _CaffScreenState extends State<CaffScreen> {
                               const Padding(
                                   padding: EdgeInsets.only(right: 20)),
                               caffProvider.canModify(caffProvider.caff.isOwner)
-                                  ? GestureDetector(
-                                      onTap: () {
+                                  ? IconButton(
+                                      onPressed: () {
                                         Navigator.of(context)
                                             .push(
                                               MaterialPageRoute(
@@ -143,7 +133,8 @@ class _CaffScreenState extends State<CaffScreen> {
                                             .then(
                                                 (_) => caffProvider.getCaff());
                                       },
-                                      child: const Icon(Icons.edit),
+                                      tooltip: 'Edit CAFF',
+                                      icon: const Icon(Icons.edit),
                                     )
                                   : const Padding(
                                       padding: EdgeInsets.zero,
@@ -151,8 +142,8 @@ class _CaffScreenState extends State<CaffScreen> {
                               const Padding(
                                   padding: EdgeInsets.only(right: 10)),
                               caffProvider.canModify(caffProvider.caff.isOwner)
-                                  ? GestureDetector(
-                                      onTap: () {
+                                  ? IconButton(
+                                      onPressed: () {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -182,7 +173,8 @@ class _CaffScreenState extends State<CaffScreen> {
                                               );
                                             });
                                       },
-                                      child: const Icon(Icons.delete),
+                                      tooltip: 'Delete CAFF',
+                                      icon: const Icon(Icons.delete),
                                     )
                                   : const Padding(
                                       padding: EdgeInsets.zero,

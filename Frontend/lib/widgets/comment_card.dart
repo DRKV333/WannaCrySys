@@ -38,54 +38,54 @@ class CommentCard extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Edit comment"),
-                                  content: Form(
-                                    key: _editCommentFormKey,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.multiline,
-                                      minLines: 5,
-                                      maxLines: 10,
-                                      validator: Globals.validateComment,
-                                      controller: controller,
-                                      decoration: const InputDecoration(
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.lime,
-                                                  width: 3.0))),
+                      IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Edit comment"),
+                                    content: Form(
+                                      key: _editCommentFormKey,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.multiline,
+                                        minLines: 5,
+                                        maxLines: 10,
+                                        validator: Globals.validateComment,
+                                        controller: controller,
+                                        decoration: const InputDecoration(
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.lime,
+                                                    width: 3.0))),
+                                      ),
                                     ),
-                                  ),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("Cancel")),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          if (_editCommentFormKey.currentState
-                                                  ?.validate() ??
-                                              false) {
-                                            edit(comment.id, controller.text);
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
                                             Navigator.of(context).pop();
-                                            controller.text = "";
-                                          }
-                                        },
-                                        child: const Text("Edit")),
-                                  ],
-                                );
-                              });
-                        },
-                        child: const Icon(Icons.edit),
-                      ),
+                                          },
+                                          child: const Text("Cancel")),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            if (_editCommentFormKey.currentState
+                                                    ?.validate() ??
+                                                false) {
+                                              edit(comment.id, controller.text);
+                                              Navigator.of(context).pop();
+                                              controller.text = "";
+                                            }
+                                          },
+                                          child: const Text("Edit")),
+                                    ],
+                                  );
+                                });
+                          },
+                          tooltip: 'Edit comment',
+                          icon: const Icon(Icons.edit)),
                       const Padding(padding: EdgeInsets.only(right: 10)),
-                      GestureDetector(
-                        onTap: () {
+                      IconButton(
+                        onPressed: () {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -107,7 +107,8 @@ class CommentCard extends StatelessWidget {
                                 );
                               });
                         },
-                        child: const Icon(Icons.delete),
+                        tooltip: 'Delete comment',
+                        icon: const Icon(Icons.delete),
                       ),
                     ],
                   )
