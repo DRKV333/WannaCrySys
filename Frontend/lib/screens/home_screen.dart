@@ -3,6 +3,7 @@ import 'package:caff_parser/providers/caff_provider.dart';
 import 'package:caff_parser/providers/home_provider.dart';
 import 'package:caff_parser/screens/add_caff_screen.dart';
 import 'package:caff_parser/screens/caff_screen.dart';
+import 'package:caff_parser/screens/profile_screen.dart';
 import 'package:caff_parser/widgets/caff_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,18 +21,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<HomeProvider>(context, listen: false).getCaffList();
+    _getCaffList();
   }
 
-  void _navigateToAddCaffScreen() {
-    CaffProvider caffProvider = Provider.of<CaffProvider>(context, listen: false);
+  void _getCaffList() => Provider.of<HomeProvider>(context, listen: false).getCaffList();
+
+  void _navigateToProfileScreen() {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: authProvider,
+            child: const ProfileScreen(),
+          )),
+    );
+  }
+
+  Future<void> _navigateToAddCaffScreen() async {
+    CaffProvider caffProvider = Provider.of<CaffProvider>(context, listen: false);
+    var result = await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider.value(
             value: caffProvider,
             child: const AddCaffScreen(),
           )),
     );
+
+    if (result != null) {
+      _getCaffList();
+    }
   }
 
   @override
@@ -43,13 +61,20 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             centerTitle: true,
             title: const Text('Caff Parser'),
+            leading: IconButton(
+              onPressed: _navigateToProfileScreen,
+              tooltip: 'Profile',
+              icon: const Icon(Icons.account_circle),
+            ),
             actions: [
               IconButton(
                   onPressed: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();
                   },
-                  icon: const Icon(Icons.logout))
+                  tooltip: 'Logout',
+                  icon: const Icon(Icons.logout),
+              )
             ],
           ),
           body: Column(
@@ -74,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 10
                       ),
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       itemCount: homeProvider.caffList.length,
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(

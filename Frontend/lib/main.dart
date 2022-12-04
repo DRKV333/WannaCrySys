@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:caff_parser/network/auth_service.dart';
 import 'package:caff_parser/providers/auth_provider.dart';
 import 'package:caff_parser/providers/caff_provider.dart';
@@ -11,10 +13,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'network/caff_service.dart';
 import 'network/home_service.dart';
 
+class AppHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) =>
+      super.createHttpClient(context)
+        ..badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  HttpOverrides.global = AppHttpOverrides();
+
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 

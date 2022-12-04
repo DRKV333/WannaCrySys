@@ -1,4 +1,3 @@
-import 'package:caff_parser/providers/auth_provider.dart';
 import 'package:caff_parser/providers/caff_provider.dart';
 import 'package:caff_parser/screens/edit_caff_screen.dart';
 import 'package:caff_parser/utils/globals.dart';
@@ -35,14 +34,7 @@ class _CaffScreenState extends State<CaffScreen> {
         child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Caff Parser'),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  await Provider.of<AuthProvider>(context, listen: false).logout();
-                },
-                icon: const Icon(Icons.logout))
-          ],
+          title: Text(caffProvider.caff.title!),
         ),
         body: ListView(
             scrollDirection: Axis.vertical,
@@ -114,7 +106,7 @@ class _CaffScreenState extends State<CaffScreen> {
                         caffProvider.purchaseCaff();
                       }
                       },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.lime),
+                    style: ElevatedButton.styleFrom(primary: Colors.lime),
                     child: caffProvider.caff.isPurchased ? const Text("Download") : const Text("Purchase")
                 ),
                 const Padding(padding: EdgeInsets.only(right: 20)),
@@ -182,7 +174,7 @@ class _CaffScreenState extends State<CaffScreen> {
               alignment: Alignment.topCenter,
               child: ElevatedButton(
                 onPressed: () {caffProvider.addComment(widget.id, caffProvider.commentController.text);},
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.lime),
+                style: ElevatedButton.styleFrom(primary: Colors.lime),
                 child: const Text("Comment"),
               ),
             ),
