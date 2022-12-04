@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:jwt_io/jwt_io.dart';
 import 'package:provider/provider.dart';
 
-import 'caff_screen.dart';
-
 class AppWrapper extends StatefulWidget {
   const AppWrapper({Key? key}) : super(key: key);
 
@@ -29,7 +27,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<String?>(
-    stream: _authProvider.tokenStream,
+      stream: _authProvider.tokenStream,
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         String? token = snapshot.data;
 
@@ -38,6 +36,5 @@ class _AppWrapperState extends State<AppWrapper> {
           return HomeScreen(username: tokenPayload['username']);
         }
         return const AuthScreen();
-      }
-  );
+      });
 }

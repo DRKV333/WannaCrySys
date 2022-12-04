@@ -45,67 +45,66 @@ class _EditCaffScreenState extends State<EditCaffScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      centerTitle: true,
-      title: const Text('Edit CAFF'),
-    ),
-    body: Container(
-      margin: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _addCaffFormKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Edit CAFF'),
+        ),
+        body: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _addCaffFormKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BorderedTextField(
-                  _titleController,
-                  'Title',
-                  TextInputType.text,
-                  validateFun: Globals.validateTitle,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _pickedFile != null
-                        ? Text(_pickedFile!.name)
-                        : const SizedBox(),
-                    Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 3,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: _chooseFile,
-                        child: const Text('Choose file'),
-                      ),
+                    BorderedTextField(
+                      _titleController,
+                      'Title',
+                      TextInputType.text,
+                      validateFun: Globals.validateTitle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _pickedFile != null
+                            ? Text(_pickedFile!.name)
+                            : const SizedBox(),
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 3,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: _chooseFile,
+                            child: const Text('Choose file'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                Consumer<CaffProvider>(
+                  builder: (_, caffProvider, __) => CircularButton(
+                    isLoading: caffProvider.isLoading,
+                    text: 'Edit',
+                    onPressed: () async {
+                      if (_addCaffFormKey.currentState?.validate() ?? false) {
+                        bool success = await caffProvider.editCaff(
+                          caffProvider.caffId,
+                          _pickedFile,
+                          _titleController.text,
+                        );
+                        if (success) {
+                          _navigateBack();
+                        }
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
-            Consumer<CaffProvider>(
-              builder: (_, caffProvider, __) => CircularButton(
-                isLoading: caffProvider.isLoading,
-                text: 'Edit',
-                onPressed: () async {
-                  if (_addCaffFormKey.currentState?.validate() ?? false) {
-
-                    bool success = await caffProvider.editCaff(
-                      caffProvider.caffId,
-                      _pickedFile,
-                      _titleController.text,
-                    );
-                    if (success) {
-                      _navigateBack();
-                    }
-                  }
-                },
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 }

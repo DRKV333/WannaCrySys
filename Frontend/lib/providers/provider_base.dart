@@ -10,6 +10,7 @@ abstract class ProviderBase extends ChangeNotifier {
   bool _isLoading = false;
 
   bool get isDisposed => _isDisposed;
+
   bool get isLoading => _isLoading;
 
   ProviderBase(this._sharedPreferences);

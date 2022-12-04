@@ -1,15 +1,16 @@
 import 'dart:io';
 import 'package:caff_parser/models/api_result.dart';
+import 'package:caff_parser/utils/globals.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import '../utils/globals.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class ServiceBase {
   late Dio dio;
 
   ServiceBase() {
-    dio = Dio(BaseOptions(
-        baseUrl: Globals.baseIp, receiveDataWhenStatusError: true));
+    dio = Dio(
+        BaseOptions(baseUrl: Globals.baseIp, receiveDataWhenStatusError: true));
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient dioClient) {
@@ -20,7 +21,9 @@ abstract class ServiceBase {
   }
 
   ApiResult? handleNetworkError(DioError e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
     if (e.response != null) {
       return ApiResult(
           isSuccess: false, errorMessage: e.response!.data.toString());

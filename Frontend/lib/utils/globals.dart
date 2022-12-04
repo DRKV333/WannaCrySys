@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Globals {
   static final Globals _instance = Globals();
-  static const String baseIp = 'https://192.168.1.99:8081';
+  static const String baseIp = 'https://192.168.1.159:8081';
 
   factory Globals() {
     return _instance;
@@ -121,6 +121,24 @@ class Globals {
         }
         if (containsNonAlphanumeric.hasMatch(value)) {
           return 'Title must contain only alphanumeric characters';
+        }
+      }
+    }
+    return null;
+  }
+
+  static String? validateComment(String? value,
+      {bool required = true, bool validateRegExp = true}) {
+    if (required && (value == null || value.isEmpty)) {
+      return 'Comment must be filled';
+    }
+    if (validateRegExp) {
+      if (value != null && value.isNotEmpty) {
+        value = value.trim();
+        int min = 1, max = 256;
+
+        if (!lengthRegExp(min, max).hasMatch(value)) {
+          return "Comment's length must be between $min and $max";
         }
       }
     }

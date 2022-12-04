@@ -12,12 +12,14 @@ import '../models/comment_dto.dart';
 
 class CaffProvider extends ProviderBase {
   final CaffService _caffService;
-  CaffDetailsDto caff = CaffDetailsDto(id: 0, title: "", comments: [], isPurchased: false, isOwner: false);
+  CaffDetailsDto caff = CaffDetailsDto(
+      id: 0, title: "", comments: [], isPurchased: false, isOwner: false);
   List<CommentDto> commentList = <CommentDto>[];
   final TextEditingController commentController = TextEditingController();
   int caffId = 0;
 
-  CaffProvider(this._caffService, SharedPreferences sharedPreferences) : super(sharedPreferences);
+  CaffProvider(this._caffService, SharedPreferences sharedPreferences)
+      : super(sharedPreferences);
 
   Future<bool> createCaff(PlatformFile caffFile, String title) async {
     changeLoadingStatus();
@@ -45,7 +47,8 @@ class CaffProvider extends ProviderBase {
     return false;
   }
 
-  Future<bool> editCaff(int caffId, PlatformFile? caffFile, String title) async {
+  Future<bool> editCaff(
+      int caffId, PlatformFile? caffFile, String title) async {
     changeLoadingStatus();
 
     MultipartFile? caffMultipartFile;
@@ -58,7 +61,7 @@ class CaffProvider extends ProviderBase {
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult =
-      await _caffService.editCaff(token, caffId, caffMultipartFile, title);
+          await _caffService.editCaff(token, caffId, caffMultipartFile, title);
       changeLoadingStatus();
       if (apiResult != null) {
         if (apiResult.isSuccess) {
@@ -75,16 +78,16 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<void> getCaff() async {
-
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult = await _caffService.getCaff(token, caffId);
 
       if (apiResult != null) {
         if (apiResult.isSuccess) {
-          caff = CaffDetailsDto.fromJson(apiResult.data as Map<String, dynamic>);
+          caff =
+              CaffDetailsDto.fromJson(apiResult.data as Map<String, dynamic>);
           commentList.clear();
-          for(var c in caff.comments){
+          for (var c in caff.comments) {
             commentList.add(CommentDto.fromJson(c as Map<String, dynamic>));
           }
           notifyListeners();
@@ -98,7 +101,6 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<void> purchaseCaff() async {
-
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult = await _caffService.purchaseCaff(token, caffId);
@@ -117,13 +119,14 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<void> downloadCaff() async {
-
     String? token = await isLoggedIn();
     if (token != null) {
-      ApiResult? apiResult = await _caffService.downloadCaff(token, caffId, caff.title!);
+      ApiResult? apiResult =
+          await _caffService.downloadCaff(token, caffId, caff.title!);
       if (apiResult != null) {
         if (apiResult.isSuccess) {
-          //
+          Globals.showMessage(
+              'File successfully downloaded to the location:\n${apiResult.data}');
         } else {
           Globals.showMessage(apiResult.errorMessage!, true);
         }
@@ -134,7 +137,6 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<bool> deleteCaff() async {
-
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult = await _caffService.deleteCaff(token, caffId);
@@ -161,6 +163,8 @@ class CaffProvider extends ProviderBase {
       if (apiResult != null) {
         if (apiResult.isSuccess) {
           getCaff();
+          commentController.clear();
+          Globals.showMessage('Comment added successfully');
         } else {
           Globals.showMessage(apiResult.errorMessage!, true);
         }
@@ -171,10 +175,10 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<void> editComment(int commentId, String content) async {
-
     String? token = await isLoggedIn();
     if (token != null) {
-      ApiResult? apiResult = await _caffService.editComment(token, commentId, content);
+      ApiResult? apiResult =
+          await _caffService.editComment(token, commentId, content);
 
       if (apiResult != null) {
         if (apiResult.isSuccess) {
@@ -189,7 +193,6 @@ class CaffProvider extends ProviderBase {
   }
 
   Future<void> deleteComment(int commentId) async {
-
     String? token = await isLoggedIn();
     if (token != null) {
       ApiResult? apiResult = await _caffService.deleteComment(token, commentId);
@@ -206,12 +209,14 @@ class CaffProvider extends ProviderBase {
     }
   }
 
-  bool canModify(bool isOwner){
-    if(isOwner){return true;}
+  bool canModify(bool isOwner) {
+    if (isOwner) {
+      return true;
+    }
     String? token = getToken();
     if (token != null) {
       Map<String, dynamic> tokenPayload = JwtToken.payload(token);
-      if(tokenPayload["role"] == "Administrator"){
+      if (tokenPayload["role"] == "Administrator") {
         return true;
       }
     }
