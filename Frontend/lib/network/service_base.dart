@@ -8,8 +8,8 @@ abstract class ServiceBase {
   late Dio dio;
 
   ServiceBase() {
-    dio = Dio(BaseOptions(
-        baseUrl: Globals.baseIp, receiveDataWhenStatusError: true));
+    dio = Dio(
+        BaseOptions(baseUrl: Globals.baseIp, receiveDataWhenStatusError: true));
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient dioClient) {

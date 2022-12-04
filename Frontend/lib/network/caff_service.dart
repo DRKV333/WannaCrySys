@@ -106,8 +106,7 @@ class CaffService extends ServiceBase {
     try {
       Directory downloadDir = (await getExternalStorageDirectory())!;
       String filePath = "${downloadDir.path}/$title.caff";
-      Response response = await dio.download(
-          '/DownloadCaffFile', filePath,
+      Response response = await dio.download('/DownloadCaffFile', filePath,
           queryParameters: {"caffId": caffId},
           options: Options(headers: {'Authorization': 'Bearer $token'}));
       if (response.statusCode == 200) {

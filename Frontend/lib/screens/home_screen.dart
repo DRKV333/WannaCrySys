@@ -24,27 +24,30 @@ class _HomeScreenState extends State<HomeScreen> {
     _getCaffList();
   }
 
-  void _getCaffList() => Provider.of<HomeProvider>(context, listen: false).getCaffList();
+  void _getCaffList() =>
+      Provider.of<HomeProvider>(context, listen: false).getCaffList();
 
   void _navigateToProfileScreen() {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider.value(
-            value: authProvider,
-            child: const ProfileScreen(),
-          )),
+                value: authProvider,
+                child: const ProfileScreen(),
+              )),
     );
   }
 
   Future<void> _navigateToAddCaffScreen() async {
-    CaffProvider caffProvider = Provider.of<CaffProvider>(context, listen: false);
+    CaffProvider caffProvider =
+        Provider.of<CaffProvider>(context, listen: false);
     var result = await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider.value(
-            value: caffProvider,
-            child: const AddCaffScreen(),
-          )),
+                value: caffProvider,
+                child: const AddCaffScreen(),
+              )),
     );
 
     if (result != null) {
@@ -56,75 +59,79 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) =>
       Consumer<HomeProvider>(builder: (context, homeProvider, child) {
         return GestureDetector(
-        onTap: () {FocusScope.of(context).requestFocus(FocusNode());},
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Caff Parser'),
-            leading: IconButton(
-              onPressed: _navigateToProfileScreen,
-              tooltip: 'Profile',
-              icon: const Icon(Icons.account_circle),
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () async {
-                    await Provider.of<AuthProvider>(context, listen: false)
-                        .logout();
-                  },
-                  tooltip: 'Logout',
-                  icon: const Icon(Icons.logout),
-              )
-            ],
-          ),
-          body: Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: TextField(
-                    controller: homeProvider.searchController,
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: const Text('Caff Parser'),
+                leading: IconButton(
+                  onPressed: _navigateToProfileScreen,
+                  tooltip: 'Profile',
+                  icon: const Icon(Icons.account_circle),
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      await Provider.of<AuthProvider>(context, listen: false)
+                          .logout();
+                    },
+                    tooltip: 'Logout',
+                    icon: const Icon(Icons.logout),
                   )
+                ],
               ),
-              ElevatedButton(
-                  onPressed: (){homeProvider.getCaffList();},
-                  child: const Text("Search")
-              ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
-              Expanded(
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent:
-                          MediaQuery.of(context).size.width * 0.5,
-                          childAspectRatio: 2 / 2.5,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 10
-                      ),
-                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                      itemCount: homeProvider.caffList.length,
-                      itemBuilder: (BuildContext context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (contextNavigator) {
+              body: Column(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: TextField(
+                        controller: homeProvider.searchController,
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
+                        homeProvider.getCaffList();
+                      },
+                      child: const Text("Search")),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  Expanded(
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  childAspectRatio: 2 / 2.5,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 10),
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          itemCount: homeProvider.caffList.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (contextNavigator) {
                                   return ChangeNotifierProvider.value(
-                                      value: Provider.of<CaffProvider>(context, listen: false),
-                                      child: CaffScreen(id: homeProvider.caffList[index].id)
-                                  );
+                                      value: Provider.of<CaffProvider>(context,
+                                          listen: false),
+                                      child: CaffScreen(
+                                          id: homeProvider.caffList[index].id));
                                 })).then((_) => homeProvider.getCaffList());
-                          },
-                          child: CaffCard(
-                            title: homeProvider.caffList[index].title,
-                            imgURL: homeProvider.caffList[index].imgURL,
-                          ),
-                        );
-                      }))
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _navigateToAddCaffScreen,
-            tooltip: 'Add CAFF',
-            child: const Icon(Icons.add),
-          ),
-        ));
+                              },
+                              child: CaffCard(
+                                title: homeProvider.caffList[index].title,
+                                imgURL: homeProvider.caffList[index].imgURL,
+                              ),
+                            );
+                          }))
+                ],
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: _navigateToAddCaffScreen,
+                tooltip: 'Add CAFF',
+                child: const Icon(Icons.add),
+              ),
+            ));
       });
-  }
+}

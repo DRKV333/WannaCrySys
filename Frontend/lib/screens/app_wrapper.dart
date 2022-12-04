@@ -27,7 +27,7 @@ class _AppWrapperState extends State<AppWrapper> {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<String?>(
-    stream: _authProvider.tokenStream,
+      stream: _authProvider.tokenStream,
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         String? token = snapshot.data;
 
@@ -36,6 +36,5 @@ class _AppWrapperState extends State<AppWrapper> {
           return HomeScreen(username: tokenPayload['username']);
         }
         return const AuthScreen();
-      }
-  );
+      });
 }

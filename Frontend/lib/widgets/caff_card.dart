@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CaffCard extends StatelessWidget{
-
+class CaffCard extends StatelessWidget {
   final String title;
   final String imgURL;
 
-  const CaffCard({Key? key, required this.title, required this.imgURL}) : super(key: key);
-
+  const CaffCard({Key? key, required this.title, required this.imgURL})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +14,12 @@ class CaffCard extends StatelessWidget{
       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: Stack(
         children: [
-             SizedBox.expand(
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Image.network(imgURL),
-              ),
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: Image.network(imgURL),
             ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -28,7 +27,9 @@ class CaffCard extends StatelessWidget{
               color: Colors.lime,
               child: Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10),
-                child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Text(title,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
           )
@@ -36,5 +37,4 @@ class CaffCard extends StatelessWidget{
       ),
     );
   }
-
 }
