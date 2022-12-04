@@ -1,0 +1,26 @@
+version: "3.4"
+
+services:
+    db:
+      image: "mcr.microsoft.com/mssql/server:2019-latest"
+      container_name: db
+      ports:
+        - "1433:1433"
+      environment:
+        SA_PASSWORD: "S3cur3P@ssW0rd!"
+        ACCEPT_EULA: "Y"
+    api:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - "8081:443"
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Production
+          - ASPNETCORE_URLS=https://+:443;http://+:80
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/CaffShop.pfx
+        volumes:
+          - ~/.aspnet/https:/https:ro
+        depends_on:
+          - db
