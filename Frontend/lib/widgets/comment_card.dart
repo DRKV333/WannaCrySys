@@ -30,7 +30,7 @@ class CommentCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-                "${comment.userName} : ${comment.createdDate.substring(0, 16)}"),
+                "${comment.userName} : ${Globals.formatDate(comment.createdDate)}"),
             const Padding(padding: EdgeInsets.only(top: 5)),
             Text(comment.content),
             const Padding(padding: EdgeInsets.only(top: 5)),

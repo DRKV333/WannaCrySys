@@ -69,7 +69,7 @@ class _CaffScreenState extends State<CaffScreen> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 7, top: 2),
                               child: Text(
-                                "Created: ${caffProvider.caff.createdDate?.substring(0, 10)}",
+                                "Created: ${Globals.formatDate(caffProvider.caff.createdDate)}",
                                 style: const TextStyle(fontSize: 17),
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Globals {
   static final Globals _instance = Globals();
@@ -144,4 +145,11 @@ class Globals {
     }
     return null;
   }
+
+  static DateTime convertStringToDate(String? dateString) =>
+      DateFormat('yyyy-MM-ddTHH:mm:ss')
+          .parse(dateString ?? DateTime.now().toIso8601String());
+
+  static String formatDate(String? dateString) =>
+      DateFormat('yyyy.MM.dd. h:mm a').format(convertStringToDate(dateString));
 }
