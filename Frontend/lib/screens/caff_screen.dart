@@ -2,6 +2,7 @@ import 'package:caff_parser/providers/caff_provider.dart';
 import 'package:caff_parser/screens/edit_caff_screen.dart';
 import 'package:caff_parser/utils/globals.dart';
 import 'package:caff_parser/widgets/comment_card.dart';
+import 'package:caff_parser/widgets/download_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +105,17 @@ class _CaffScreenState extends State<CaffScreen> {
                                       if (status.isDenied) {
                                         await Permission.storage.request();
                                       }
-                                      caffProvider.downloadCaff();
+                                      await showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (_) =>
+                                            ChangeNotifierProvider.value(
+                                          value: Provider.of<CaffProvider>(
+                                              context,
+                                              listen: false),
+                                          child: const DownloadDialog(),
+                                        ),
+                                      );
                                     } else {
                                       caffProvider.purchaseCaff();
                                     }
